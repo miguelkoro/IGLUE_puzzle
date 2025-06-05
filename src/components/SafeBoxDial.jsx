@@ -30,11 +30,11 @@ const  SafeBoxDial = ( props ) => {
     };
 
     const handleMouseUp = () => {
-        if (props.checking || props.isReseting || props.rotationAngle==[]) return ;
+        if (props.checking || props.isReseting ) return ;
         setIsMouseDown(false); // Indica que el mouse ya no está presionado
         //reset(); // Reinicia la rotación //Poniendolo aqui, hace efecto de teelfono de dial
         //Para poder poner -55 si va contrarreloj o 30 si va a favor
-        props.setSolutionArray((sol) => [...sol, (rotationDirection === "clockwise" ? props.rotationAngle/6 : -props.rotationAngle/6)]);
+        props.setSolutionArray((sol) => [...sol, (rotationDirection === "clockwise" ? String(props.rotationAngle/6) : String('-'+props.rotationAngle/6))]);
         setRotationDirection(''); //Reinicia la direccion de rotacion
     };
 

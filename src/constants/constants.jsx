@@ -77,9 +77,12 @@ export const DEFAULT_APP_SETTINGS = {
 };
 
 export const SKIN_SETTINGS_RETRO = {
-  background: "images/background_retro.png",
+  background: "images/retro/background.png",
   backgroundKeypad: "images/background_keypad_retro.png",
   backgroundKey: "images/background_key_retro.png",
+  
+  backgroundLock : "images/retro/background_lock_retro.png",
+  backgroundDial: "images/retro/dial_retro.png",
   coloredBackgroundKeys: [
     "images/background_key_retro_red.png",
     "images/background_key_retro_green.png",
@@ -95,18 +98,22 @@ export const SKIN_SETTINGS_RETRO = {
     "images/background_key_retro_white.png",
   ],
   backgroundMessage: "images/background_message_retro.png",
-  imageLightOff: "images/light_off_retro.png",
-  imageLightNok: "images/light_off_retro.png",
-  imageLightOk: "images/light_ok_retro.png",
+  imageLightOff: "images/retro/light_off_retro.png",
+  imageLightNok: "images/retro/light_nok_retro.png",
+  imageLightOk: "images/retro/light_ok_retro.png",
   soundBeep: "sounds/beep_retro.wav",
   soundNok: "sounds/solution_nok_retro.wav",
   soundOk: "sounds/solution_ok_retro.wav",
+
 };
 
 export const SKIN_SETTINGS_FUTURISTIC = {
   background: "images/background_futuristic.png",
   backgroundKeypad: "images/background_keypad_futuristic.png",
   backgroundKey: "images/background_key_futuristic.png",
+  
+  backgroundLock : "images/standard/background_lock_retro.png",
+  backgroundDial: "images/standard/dial_retro.png",
   coloredBackgroundKeys: [
     "images/background_key_futuristic_red.png",
     "images/background_key_futuristic_green.png",
