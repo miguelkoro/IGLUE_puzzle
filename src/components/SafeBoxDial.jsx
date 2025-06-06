@@ -89,7 +89,11 @@ const  SafeBoxDial = ( props ) => {
            // backgroundImage: 'url("' + appSettings.backgroundLock + '")',
             width: props.boxWidth,//Math.min(props.boxWidth, props.boxHeight) * 0.7, 
             height: props.boxHeight, //Math.min(props.boxWidth, props.boxHeight) * 0.7,
-            display: "flex", alignItems: "center", justifyContent: "center",}}
+            display: "flex", alignItems: "center", justifyContent: "center",
+            position: "relative", // Necesario para el posicionamiento absoluto del dial
+            zIndex:1,
+          zIndex: 0
+        }}
         
             onDragStart={(event) => event.preventDefault()} 
             onMouseUp={handleMouseUp} 
@@ -100,7 +104,7 @@ const  SafeBoxDial = ( props ) => {
               backgroundImage: 'url("' + appSettings.backgroundDial + '")',
               height:props.boxHeight*0.53,
               width: props.boxWidth*0.53,
-              zIndex: 2,//props.styles.dial_text_zIndex,
+              //zIndex: 5,//props.styles.dial_text_zIndex,
               //width: Math.min(props.boxWidth, props.boxHeight) * props.styles.dial_size, // Usa el menor valor para asegurar que sea cuadrado
               //height: Math.min(props.boxWidth, props.boxHeight) * props.styles.dial_size, // Usa el menor valor para asegurar que sea cuadrado
               //marginLeft: props.boxWidth / 2 * 0.225,

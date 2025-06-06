@@ -74,6 +74,11 @@ export const DEFAULT_APP_SETTINGS = {
   soundNok: "sounds/solution_nok.mp3",
   soundOk: "sounds/solution_ok.mp3",
   soundDial: "sounds/spin.wav",
+
+  dialWidth: 0.7, // Relative size of the dial compared to the box width
+  dialHeight: 0.7, // Relative size of the dial compared to the box height
+  dialTextSize: "1.5em", // Font size for the dial text
+  dialTextColor: "#000000", // Color for the dial text
 };
 
 export const SKIN_SETTINGS_RETRO = {
@@ -108,12 +113,12 @@ export const SKIN_SETTINGS_RETRO = {
 };
 
 export const SKIN_SETTINGS_FUTURISTIC = {
-  background: "images/background_futuristic.png",
+  background: "images/futuristic/background_futuristic.png",
   backgroundKeypad: "images/background_keypad_futuristic.png",
   backgroundKey: "images/background_key_futuristic.png",
   
-  backgroundLock : "images/standard/background_lock_retro.png",
-  backgroundDial: "images/standard/dial_retro.png",
+  backgroundLock : "images/futuristic/background_lock_futuristic.png",
+  backgroundDial: "images/futuristic/dial_futuristic.png",
   coloredBackgroundKeys: [
     "images/background_key_futuristic_red.png",
     "images/background_key_futuristic_green.png",
@@ -129,9 +134,9 @@ export const SKIN_SETTINGS_FUTURISTIC = {
     "images/background_key_futuristic_white.png",
   ],
   backgroundMessage: "images/background_message_futuristic.png",
-  imageLightOff: "images/light_off_futuristic.png",
-  imageLightNok: "images/light_nok_futuristic.png",
-  imageLightOk: "images/light_ok_futuristic.png",
+  imageLightOff: "images/futuristic/light_off_futuristic.png",
+  imageLightNok: "images/futuristic/light_nok_futuristic.png",
+  imageLightOk: "images/futuristic/light_ok_futuristic.png",
   soundNok: "sounds/solution_nok_futuristic.wav",
 };
 

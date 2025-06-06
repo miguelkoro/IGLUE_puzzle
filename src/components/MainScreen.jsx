@@ -36,7 +36,7 @@ const MainScreen = (props) => {
       //dial_sound: "sounds/spin.wav",
       dial_text_color: "#000000",
       dial_text_size: "13vmin",
-      dial_text_zIndex: 1,
+      //dial_text_zIndex: 1,
     },
     "RETRO": {
       //lock: "images/lock_old.png",
@@ -45,16 +45,16 @@ const MainScreen = (props) => {
       //dial_sound: "sounds/spin_old2.wav",
       dial_text_color:  "#FFFFFF",
       dial_text_size: "10vmin",
-      dial_text_zIndex: 1,
+      //dial_text_zIndex: 1,
     },
     "FUTURISTIC": {
-      lock: "images/lock_modern.png",
-      dial: "images/dial_modern.png",
-      dial_size: 0.6,
+      //lock: "images/lock_modern.png",
+      //dial: "images/dial_modern.png",
+      //dial_size: 0.6,
       dial_sound: "sounds/spin.wav",
       dial_text_color: "#59c2ca",
       dial_text_size: "11vmin",
-      dial_text_zIndex: -1,
+      //dial_text_zIndex: -1,
     }
   }
   const defaultStyle = styles["STANDARD"];
@@ -106,12 +106,17 @@ const MainScreen = (props) => {
         _lightTop = props.appHeight / 2 - _lockHeight * 0.4;
         break;
       case "FUTURISTIC":
-        _containerMarginTop = 0;
-        _containerMarginLeft = _keypadWidth * -0.065;
-         _lightWidth = _keypadWidth * 0.045;
-        _lightHeight = _keypadHeight * 0.48;
-        _lightLeft = props.appWidth / 2 + _keypadWidth / 2 * 0.27;
-        _lightTop = props.appHeight / 2 - _keypadHeight / 2 * 0.48;
+       // _containerMarginTop = 0;
+        //_containerMarginLeft = _lockWidth * -0.065;
+       // _containerWidth = _lockWidth *0.;
+        _containerHeight = _lockHeight *0.612;
+         _lightWidth = _lockWidth*0.9;
+        _lightHeight = _lockHeight*0.6;
+        //_lightLeft = props.appWidth / 2 + _lockWidth / 2 * 0;
+        //_lightTop = props.appHeight / 2 - _lockHeight / 2 * 0.9;
+        _boxHeight = _lockHeight * 0.9;
+        _boxWidth = _lockWidth * 0.9;
+
         break;
       default:
         //Standard skin
@@ -247,7 +252,8 @@ const MainScreen = (props) => {
     <div id="screen_main" className={"screen_content"} style={{ backgroundImage: backgroundImage }}>
       <div id="lockContainer" className="lockContainer" 
         style={{backgroundImage: 'url('+appSettings.backgroundLock+')', width: containerWidth, height: containerHeight, marginTop: containerMarginTop, marginLeft: containerMarginLeft ,
-          display: "flex", alignItems: "center", justifyContent: "center",
+          display: "flex", alignItems: "center",  zIndex: 6,
+          justifyContent: "center", flexDirection: "column", overflow: "hidden"
         }}>
       {/*<div id="keypad" style={{ width: containerWidth, height: containerHeight, marginTop: containerMarginTop, marginLeft: containerMarginLeft }}>
         <audio id="audio_beep" src={appSettings.soundBeep} autostart="false" preload="auto" />
@@ -282,12 +288,12 @@ const MainScreen = (props) => {
               rotationAngle={rotationAngle} setRotationAngle={setRotationAngle}
               setSolutionArray={setSolutionArray} isReseting={isReseting}/>
 
-
+      
       <audio id="audio_beep" src={appSettings.soundBeep} autostart="false" preload="auto" />
       <audio id="audio_failure" src={appSettings.soundNok} autostart="false" preload="auto" />
       <audio id="audio_success" src={appSettings.soundOk} autostart="false" preload="auto" />
       </div>
-              <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
+        <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
         <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
         <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div> 
     </div>);

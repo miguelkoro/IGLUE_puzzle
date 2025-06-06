@@ -6,6 +6,8 @@ div#screen_main {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	//z-index: 1;
+	position: relative;
 }
 
 div#keypad {
@@ -96,11 +98,13 @@ div.retro div.boxLight {
 	background-repeat: no-repeat;
 	background-size: contain;
 	display: flex;
-	position: relative;
+	//position: absolute;
 	//pointer-events: none;
 	//z-index: -1;
 	//top: 21%;
 	transform: (-50%, - 50px); // Centra el lock en la pantalla
+	//z-index: 1;
+	//position: relative;
 }
 
 div#lock{
@@ -109,15 +113,19 @@ div#lock{
 	background-repeat: no-repeat;
 	background-size: contain;
 	display: flex;
-	position: relative;
+	position: absolute;
+	//position: relative;
 	pointer-events: none;
-	//z-index: -1;
+	//position: absolute;
+	//z-index: 2;
 	//top: 21%;
+	z-index: -500;
 	transform: (-50%, - 50px); // Centra el lock en la pantalla
 }
 
 p#rotationNum{
 	position: absolute;
+	z-index: 1;
 	top: 50%; // Centra verticalmente
 	left: 50%; // Centra horizontalmente
 	//font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -128,5 +136,5 @@ p#rotationNum{
 	user-select: none; // Evita que el texto sea seleccionable
 	font-style: bold; // Aplica el estilo en negrita
 	//font-size : 13vmin; // Cambia el tamaño de la fuente
-	//z-index: 5;
+	//z-index: 1;
 }
