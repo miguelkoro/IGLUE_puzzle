@@ -84,6 +84,7 @@ div.boxLight {
 	outline: none;
 	text-decoration: none;
 	border-image: none;
+	pointer-events: none;
 }
 
 div.retro div.boxLight {
@@ -98,7 +99,7 @@ div.retro div.boxLight {
 	background-repeat: no-repeat;
 	background-size: contain;
 	display: flex;
-	//position: absolute;
+	position: absolute;
 	//pointer-events: none;
 	//z-index: -1;
 	//top: 21%;
@@ -119,13 +120,24 @@ div#lock{
 	//position: absolute;
 	//z-index: 2;
 	//top: 21%;
-	z-index: -500;
+	//z-index: -500;
+	transform: (-50%, - 50px); // Centra el lock en la pantalla
+}
+div.lockFuture{
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	display: flex;
+	position: absolute;
+	pointer-events: none;
+	//z-index: -1;
+	//top: 21%;
 	transform: (-50%, - 50px); // Centra el lock en la pantalla
 }
 
 p#rotationNum{
 	position: absolute;
-	z-index: 1;
+	z-index: 10;
 	top: 50%; // Centra verticalmente
 	left: 50%; // Centra horizontalmente
 	//font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -137,4 +149,22 @@ p#rotationNum{
 	font-style: bold; // Aplica el estilo en negrita
 	//font-size : 13vmin; // Cambia el tamaño de la fuente
 	//z-index: 1;
+}
+
+.blinking-dots span {
+  opacity: 0.2;
+  animation: blink 1.4s infinite both;
+  font-size: 2em;
+}
+
+.blinking-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.blinking-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0.2; }
+  40% { opacity: 1; }
 }

@@ -111,9 +111,9 @@ const  SafeBoxDial = ( props ) => {
               transform: `rotate(${props.rotationAngle}deg)`, // Rotación dinámica.
               transition: props.isReseting ? "transform 2.5s ease" : "none", // Transición suave solo durante el reset
             }}></div>
-            <p id="rotationNum" className='rotationNum' onDragStart={(event) => event.preventDefault()} 
+           {/*<p id="rotationNum" className='rotationNum' onDragStart={(event) => event.preventDefault()} 
               style={{color: props.styles.dial_text_color, fontSize: props.styles.dial_text_size, zIndex:5}}
-              >{props.rotationAngle/6}</p>      
+              >{props.rotationAngle/6}</p>      */}
               <audio id="audio_wheel" src={appSettings.soundDial} autostart="false" preload="auto" />    
         </div>
     );

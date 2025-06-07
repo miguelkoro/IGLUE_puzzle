@@ -77,8 +77,10 @@ export const DEFAULT_APP_SETTINGS = {
 
   dialWidth: 0.7, // Relative size of the dial compared to the box width
   dialHeight: 0.7, // Relative size of the dial compared to the box height
-  dialTextSize: "1.5em", // Font size for the dial text
+  dialTextSize: "9vmin", // Font size for the dial text
   dialTextColor: "#000000", // Color for the dial text
+
+  lightBack: "false", // Controls whether to show the image behind the dial frame
 };
 
 export const SKIN_SETTINGS_RETRO = {
@@ -110,6 +112,10 @@ export const SKIN_SETTINGS_RETRO = {
   soundNok: "sounds/solution_nok_retro.wav",
   soundOk: "sounds/solution_ok_retro.wav",
 
+  dialTextSize: "9vmin", // Font size for the dial text
+  dialTextColor: "#FFFFFF", // Color for the dial text
+  lightBack: "false"
+
 };
 
 export const SKIN_SETTINGS_FUTURISTIC = {
@@ -138,6 +144,10 @@ export const SKIN_SETTINGS_FUTURISTIC = {
   imageLightNok: "images/futuristic/light_nok_futuristic.png",
   imageLightOk: "images/futuristic/light_ok_futuristic.png",
   soundNok: "sounds/solution_nok_futuristic.wav",
+
+  dialTextSize: "9vmin", // Font size for the dial text
+  dialTextColor: "#0fbdfd", // Color for the dial text
+  lightBack:"true", //Para controlar si se muestra la imagen tras el marco del dial
 };
 
 export const ESCAPP_CLIENT_SETTINGS = {
