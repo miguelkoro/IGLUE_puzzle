@@ -266,6 +266,7 @@ const MainScreen = (props) => {
               setPassword={setPassword}/>
       </div>
         
+
         <audio id="audio_success" src={appSettings.soundOk} preload="auto"></audio>
         <audio id="audio_failure" src={appSettings.soundNok} preload="auto"></audio>
     </div>);

@@ -53,16 +53,18 @@ const  SafeBoxDial = ( props ) => {
     const getNumber = (angle) => {
       //if(angle >0 && angle <= 60)console.log("nada");
       let number=""
-      if(angle > 60 && angle <= 96)number="1";
-      else if(angle > 96 && angle <= 120)number="2";
-      else if(angle > 120 && angle <= 156)number="3";
-      else if(angle > 156 && angle <= 180)number="4";
-      else if(angle > 180 && angle <= 210)number="5";
-      else if(angle > 210 && angle <= 240)number="6";
-      else if(angle > 240 && angle <= 270)number="7";
-      else if(angle > 270 && angle <= 294)number="8";
-      else if(angle > 294 && angle <= 326)number="9";
-      else if(angle > 326)number="0";
+      let angleMultiplier= 30;
+      let initialAngle = 50;
+      if(angle > initialAngle && angle <= initialAngle+angleMultiplier*1)number="1";
+      else if(angle > initialAngle+angleMultiplier*1 && angle <= initialAngle+angleMultiplier*2)number="2";
+      else if(angle > initialAngle+angleMultiplier*2 && angle <= initialAngle+angleMultiplier*3)number="3";
+      else if(angle > initialAngle+angleMultiplier*3 && angle <= initialAngle+angleMultiplier*4)number="4";
+      else if(angle > initialAngle+angleMultiplier*4 && angle <= initialAngle+angleMultiplier*5)number="5";
+      else if(angle > initialAngle+angleMultiplier*5 && angle <= initialAngle+angleMultiplier*6)number="6";
+      else if(angle > initialAngle+angleMultiplier*6 && angle <= initialAngle+angleMultiplier*7)number="7";
+      else if(angle > initialAngle+angleMultiplier*7 && angle <= initialAngle+angleMultiplier*8)number="8";
+      else if(angle > initialAngle+angleMultiplier*8 && angle <= initialAngle+angleMultiplier*9)number="9";
+      else if(angle > initialAngle+angleMultiplier*9)number="0";
       props.setPassword((prevPassword) => prevPassword + number); // Concatena el número al estado `password`
     }
 
