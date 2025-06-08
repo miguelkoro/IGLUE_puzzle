@@ -81,6 +81,21 @@ export const DEFAULT_APP_SETTINGS = {
   dialTextColor: "#000000", // Color for the dial text
 
   lightBack: "false", // Controls whether to show the image behind the dial frame
+
+  //
+
+  channels : [
+    { id: 12345, name: "Never Gonna Give you up", sources: [{src:"https://youtu.be/dQw4w9WgXcQ?si=ReWN7oDLo1kUD1zR&t=42", type: "video/youtube" }]},
+    { id: 54321, name: "Major Tom", sources: [{src:"https://www.youtube.com/watch?v=iYYRH4apXDo", type: "video/youtube" }]},
+    { id: 21465, name: "Mr Roboto", sources: [{src:"https://youtu.be/uc6f_2nPSX8?si=0Qeg3ImkfDbcQWcm", type: "video/youtube"}] },
+    { id: 22228, name: "I Ran", sources: [{src:"https://youtu.be/iIpfWORQWhU?si=2bwXOMzyy0unAD-1", type: "video/youtube" }]},
+    { id: 23545, name: "This Fire", sources: [{src:"https://www.youtube.com/watch?v=haW_ruZ_Be8", type: "video/youtube" }]},
+    { id: 23985, name: "Running up that hill", sources: [{src:"https://youtu.be/wp43OdtAAkM?si=uCBahW4wsL6MUpxB", type: "video/youtube"}] },
+    { id: 23845, name: "The Cigarette", sources: [{src:"https://youtu.be/4TV_128Fz2g?si=OlZpJOoKEaIHSoMB", type: "video/youtube" }]},
+    { id: 23445, name: "Documental Titanic", sources: [{src:"https://youtu.be/8d_FxY-8D1I?si=yaiPkrPONcrUi6fM", type: "video/youtube" }]},
+    { id: 1792, name: "Documental Rev Francesa", sources: [{src:"https://youtu.be/hqVdCMpmzfo?si=TR8yfpLxxxrMsKwF", type: "video/youtube" }]},
+    { id: 1111, name: "Twenty one Pilots Ride", sources: [{src:"https://www.youtube.com/watch?v=Pw-0pbY9JeU", type: "video/youtube" }]},
+  ]
 };
 
 export const SKIN_SETTINGS_RETRO = {
