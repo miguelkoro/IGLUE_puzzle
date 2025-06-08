@@ -125,7 +125,7 @@ const MainScreen = (props) => {
         //_containerMarginLeft = _keypadWidth * 0;
         _lightWidth = _lockWidth * 0.08;
         _lightHeight = _lockHeight * 0.08;
-        _lightLeft =  _lockWidth  * 0.45;
+        _lightLeft =  _lockWidth  * 0.33;
         _lightTop =  _lockHeight  * 0.32
     }
 
@@ -264,15 +264,16 @@ const MainScreen = (props) => {
               boxWidth={boxWidth} boxHeight={boxHeight} checking={processingSolution} 
               rotationAngle={rotationAngle} setRotationAngle={setRotationAngle}
               setPassword={setPassword}/>
+              
+         <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
+        <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
+        <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div>
       </div>
         
 
         <audio id="audio_success" src={appSettings.soundOk} preload="auto"></audio>
         <audio id="audio_failure" src={appSettings.soundNok} preload="auto"></audio>
-
-         <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
-        <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
-        <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div> 
+ 
      
     </div>);
 };
