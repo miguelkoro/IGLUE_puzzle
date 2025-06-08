@@ -29,7 +29,7 @@ const  Dial = ( props ) => {
 
         if(props.rotationAngle === newRotation) return; // No actualiza si el ángulo no ha cambiado
         if(props.rotationAngle/3===119 && rotationDir) return; // Si el nuevo ángulo es menor a -55 y la dirección es antihoraria, no hace nada
-        console.log(newRotation/3, rotationDir);
+       // console.log(newRotation/3, rotationDir);
         if(props.rotationAngle/3===0 && !rotationDir) return;
 
         props.setRotationAngle(newRotation);     // Actualiza el ángulo de rotación

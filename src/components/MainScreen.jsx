@@ -161,7 +161,7 @@ const MainScreen = (props) => {
     setLightTop(_lightTop);
   }
 
-  const onClickButton = (value) => {
+  /*const onClickButton = (value) => {
     if (processingSolution) {
       return;
     }
@@ -194,12 +194,15 @@ const MainScreen = (props) => {
         });
       }
     }, 300);
-  }
+  }*/
 
   const checkSolution = () => {
+    if (processingSolution) {
+      return;
+    }
     setProcessingSolution(true);
-    Utils.log("Check solution", solutionArray);
-    const solution = solutionArray.join(';');
+    Utils.log("Check solution", [ frequency/3, wavelength/3, amplitude/3]);
+    const solution = [ frequency/3, wavelength/3, amplitude/3].join(';');
     //const solution="12315"
     reset(); // Reinicia el lock
     console.log("Check solution", solution);
@@ -218,12 +221,12 @@ const MainScreen = (props) => {
   const changeBoxLight = (success, solution) => {
     let audio;
     let afterChangeBoxLightDelay = 1000;
-    appSettings.skin === "RETRO" ? afterChangeBoxLightDelay = 4500 : afterChangeBoxLightDelay = 1500;
+    //appSettings.skin === "RETRO" ? afterChangeBoxLightDelay = 4500 : afterChangeBoxLightDelay = 1500;
 
     if (success) {
       audio = document.getElementById("audio_success");
       setLight("ok");
-      afterChangeBoxLightDelay = (appSettings.skin === "RETRO" ? 4500 : 1500);
+      //afterChangeBoxLightDelay = (appSettings.skin === "RETRO" ? 4500 : 1500);
     } else {
       audio = document.getElementById("audio_failure");
       setLight("nok");
@@ -253,8 +256,11 @@ const MainScreen = (props) => {
   const  reset = () =>{
     //console.log("Solution: ", solutionArray);
     setIsReseting(true);
-    setRotationAngle(0); // Reinicia el ángulo de rotación
-    setSolutionArray([]);
+    //setRotationAngle(0); // Reinicia el ángulo de rotación
+    //setSolutionArray([]);
+    setAmplitude(0); // Reinicia la amplitud
+    setFrequency(0); // Reinicia la frecuencia
+    setWavelength(0); // Reinicia la longitud de onda
     //setTries(0);
     setTimeout(() => {      
       setIsReseting(false);
@@ -262,11 +268,11 @@ const MainScreen = (props) => {
     //setChecking(false);
   }
 
-  useEffect(() => { // Comprueba si se ha alcanzado el número máximo de intentos (En local y en API)           
+ /* useEffect(() => { // Comprueba si se ha alcanzado el número máximo de intentos (En local y en API)           
     //console.log("Tries: ", tries, "Solution: ", solutionArray);
       solutionArray.length >= appSettings.solutionLength && checkSolution();
       console.log("Solution: ", solutionArray);
-  }, [solutionArray]);
+  }, [solutionArray]);*/
 
   return (
     <div id="screen_main" className={"screen_content"} style={{ backgroundImage: backgroundImage }}>
@@ -279,24 +285,24 @@ const MainScreen = (props) => {
         <div className="lockContainer" style={{backgroundImage: 'url('+appSettings.backgroundLock+')', width: containerWidth, 
           height: containerHeight,  }}>
           <div style={{  display: "flex",alignItems: "center",marginTop: containerMarginTop, marginLeft: containerMarginLeft }}>
-              <Dial id={"dial-frequency"} boxWidth={boxWidth} boxHeight={boxHeight} checking={checking} 
+              <Dial id={"dial-frequency"} boxWidth={boxWidth} boxHeight={boxHeight} checking={processingSolution} 
                 rotationAngle={frequency} setRotationAngle={setFrequency} isReseting={isReseting}
                 xPosition={boxWidth*appSettings.dialsGap*1} name={appSettings.dialsNames[0]}/>
-              <Dial id={"dial-wavelength"}  boxWidth={boxWidth} boxHeight={boxHeight} checking={checking} 
+              <Dial id={"dial-wavelength"}  boxWidth={boxWidth} boxHeight={boxHeight} checking={processingSolution} 
                 rotationAngle={wavelength} setRotationAngle={setWavelength} isReseting={isReseting} 
                 xPosition={boxWidth*appSettings.dialsGap*2 } name={appSettings.dialsNames[1]}/>
-              <Dial id={"dial-amplitude"}  boxWidth={boxWidth} boxHeight={boxHeight} checking={checking} 
+              <Dial id={"dial-amplitude"}  boxWidth={boxWidth} boxHeight={boxHeight} checking={processingSolution} 
                 rotationAngle={amplitude} setRotationAngle={setAmplitude} isReseting={isReseting}
                 xPosition={boxWidth*appSettings.dialsGap*3} name={appSettings.dialsNames[2]}/>              
           </div>    
-          <Ray boxHeight={boxHeight} boxWidth={boxWidth} checking={checking} 
+          <Ray boxHeight={boxHeight} boxWidth={boxWidth} checking={processingSolution} 
                 frequency={frequencyMapped} amplitude={amplitudeMapped} wavelength={wavelengthMapped}/>
       <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
       <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
       <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div>
      {/* <BoxButton value={0} position={initialPosition - dialSpacing} boxWidth={boxWidth} 
         boxHeight={boxHeight} onClick={checkSolution} appwidth={props.appwidth}  appheight={props.appheight}/>*/}
-         <div className={"boxButton boxButton"} onClick={() => checkSolution()} 
+         <div className={"boxButton boxButton"} onClick={() => !processingSolution && checkSolution()} 
         style={{ width: boxWidth *0.12 , height: boxHeight *0.12,
           marginLeft: initialPosition - dialSpacing, marginTop: boxHeight * -0.05, marginLeft: boxWidth * 0.8,
           backgroundImage: 'url("' + appSettings.backgroundKey + '")', position: "absolute",
