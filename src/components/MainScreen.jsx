@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { GlobalContext } from "./GlobalContext";
 import './../assets/scss/main.scss';
-import SafeBoxDial from './SafeBoxDial.jsx';
+import Dial from './Dial.jsx';
 import BoxButton from './BoxButton.jsx';
+import Ray from './Ray.jsx';
 
 const MainScreen = (props) => {
   const { escapp, appSettings, Utils, I18n } = useContext(GlobalContext);
@@ -21,6 +22,24 @@ const MainScreen = (props) => {
   const [lightHeight, setLightHeight] = useState(0); //
   const [lightLeft, setLightLeft] = useState(0);//
   const [lightTop, setLightTop] = useState(0);//
+
+  const dialSpacing = boxWidth * 0.19; // Espaciado horizontal entre los diales
+  const initialPosition = props.appwidth / 2 + boxWidth / 2  * -0.4; // Posición inicial del primer dial desde la derecha
+
+  const [frequency, setFrequency] = useState(0);
+  const [wavelength, setWavelength] = useState(0);
+  const [amplitude, setAmplitude] = useState(0);
+ 
+
+  const [checking, setChecking] = useState(false);//Cambiar
+
+  const mapRange = (value, min1, max1, min2, max2) => {
+    return min2 + ((value - min1) * (max2 - min2)) / (max1 - min1);
+  };
+  // 0 a 120 son los valoreas que devuelven los diales, el resto son los rangos de valores que estoy dispuesto a poner
+  const frequencyMapped = mapRange(frequency/3, 0, 120, 0.4, 1); // Frecuencia entre 0.6 y 4.2
+  const wavelengthMapped = mapRange(wavelength/3, 0, 120, 10, 100); // Wavelength entre 10 y 100
+  const amplitudeMapped = mapRange(amplitude/3, 0, 120, 25, 100); // Amplitud entre 25 y 250
 
   //
   const [rotationAngle, setRotationAngle] = useState(0); // Estado para la rotación
@@ -81,8 +100,8 @@ const MainScreen = (props) => {
     let _containerHeight = _lockHeight *0.8;
 
 
-    let _containerMarginLeft=0;
-    let _containerMarginTop=0;
+    let _containerMarginLeft=0.1 * _lockWidth;
+    let _containerMarginTop=0.68 * _lockHeight;
 
     let _boxWidth = _lockWidth * 0.7;
     let _boxHeight = _lockHeight * 0.7;
@@ -124,8 +143,8 @@ const MainScreen = (props) => {
         //_containerMarginLeft = _keypadWidth * 0;
         _lightWidth = _lockWidth * 0.08;
         _lightHeight = _lockHeight * 0.08;
-        _lightLeft =  _lockWidth  * 0.7;
-        _lightTop =  _lockHeight  * 0.1
+        _lightLeft =  _lockWidth  * 0.75;
+        _lightTop =  _lockHeight  * 0.05
     }
 
     setContainerWidth(_containerWidth);
@@ -251,12 +270,41 @@ const MainScreen = (props) => {
 
   return (
     <div id="screen_main" className={"screen_content"} style={{ backgroundImage: backgroundImage }}>
-      <div id="lockContainer" className="lockContainer" 
+      {/*<div id="lockContainer" className="lockContainer" 
         style={{backgroundImage: 'url('+appSettings.backgroundLock+')', width: containerWidth, 
           height: containerHeight, marginTop: containerMarginTop, marginLeft: containerMarginLeft ,
           display: "flex", alignItems: "center", 
           justifyContent: "center", flexDirection: "column"
-        }}>
+        }}>*/}
+        <div className="lockContainer" style={{backgroundImage: 'url('+appSettings.backgroundLock+')', width: containerWidth, 
+          height: containerHeight,  }}>
+          <div style={{  display: "flex",alignItems: "center",marginTop: containerMarginTop, marginLeft: containerMarginLeft }}>
+              <Dial id={"dial-frequency"} boxWidth={boxWidth} boxHeight={boxHeight} checking={checking} 
+                rotationAngle={frequency} setRotationAngle={setFrequency} isReseting={isReseting}
+                xPosition={boxWidth*appSettings.dialsGap*1} name={appSettings.dialsNames[0]}/>
+              <Dial id={"dial-wavelength"}  boxWidth={boxWidth} boxHeight={boxHeight} checking={checking} 
+                rotationAngle={wavelength} setRotationAngle={setWavelength} isReseting={isReseting} 
+                xPosition={boxWidth*appSettings.dialsGap*2 } name={appSettings.dialsNames[1]}/>
+              <Dial id={"dial-amplitude"}  boxWidth={boxWidth} boxHeight={boxHeight} checking={checking} 
+                rotationAngle={amplitude} setRotationAngle={setAmplitude} isReseting={isReseting}
+                xPosition={boxWidth*appSettings.dialsGap*3} name={appSettings.dialsNames[2]}/>              
+          </div>    
+          <Ray boxHeight={boxHeight} boxWidth={boxWidth} checking={checking} 
+                frequency={frequencyMapped} amplitude={amplitudeMapped} wavelength={wavelengthMapped}/>
+      <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
+      <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
+      <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div>
+     {/* <BoxButton value={0} position={initialPosition - dialSpacing} boxWidth={boxWidth} 
+        boxHeight={boxHeight} onClick={checkSolution} appwidth={props.appwidth}  appheight={props.appheight}/>*/}
+         <div className={"boxButton boxButton"} onClick={() => checkSolution()} 
+        style={{ width: boxWidth *0.12 , height: boxHeight *0.12,
+          marginLeft: initialPosition - dialSpacing, marginTop: boxHeight * -0.05, marginLeft: boxWidth * 0.8,
+          backgroundImage: 'url("' + appSettings.backgroundKey + '")', position: "absolute",
+        //left: props.appwidth / 2 + props.boxWidth / 2 *0.4,
+        //bottom: props.appheight / 2 - props.boxHeight / 2 *0.8,
+        cursor: "pointer",
+        }}> </div>
+</div>
       {/*<div id="keypad" style={{ width: containerWidth, height: containerHeight, marginTop: containerMarginTop, marginLeft: containerMarginLeft }}>
         <audio id="audio_beep" src={appSettings.soundBeep} autostart="false" preload="auto" />
         <audio id="audio_failure" src={appSettings.soundNok} autostart="false" preload="auto" />
@@ -285,24 +333,25 @@ const MainScreen = (props) => {
         <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
         <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div> 
       </div>*/}
-        <SafeBoxDial styles={style}
+        {/*<SafeBoxDial styles={style}
               boxWidth={boxWidth} boxHeight={boxHeight} checking={processingSolution} 
               rotationAngle={rotationAngle} setRotationAngle={setRotationAngle}
-              setSolutionArray={setSolutionArray} isReseting={isReseting}/>
-              
-      
-      <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
-      <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
-      <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div>
+              setSolutionArray={setSolutionArray} isReseting={isReseting}/>*/}
+        <div className="data-show-container" style={{marginTop: boxHeight * 0.22, alignItems:"center", justifyContent: "center", height: boxHeight, width: boxWidth, }}>
+              <p className='data-show'style={{transform: "rotate(6deg)"}}>{appSettings.dialsNames[0]}:{frequency/3}</p>
+              <p className='data-show' style={{marginTop: "6%"}}>{appSettings.dialsNames[1]}:{wavelength/3}</p>
+              <p className='data-show' style={{transform: "rotate(-6deg)"}}>{appSettings.dialsNames[2]}:{amplitude/3}</p>
+        </div>        
+
       <audio id="audio_beep" src={appSettings.soundBeep} autostart="false" preload="auto" />
       <audio id="audio_failure" src={appSettings.soundNok} autostart="false" preload="auto" />
       <audio id="audio_success" src={appSettings.soundOk} autostart="false" preload="auto" />
-      </div>
+      {/*</div>*/}
 
-      {appSettings.lightBack==="true" && <div className='lockFuture' style={{ zIndex:4 , backgroundImage: 'url('+appSettings.backgroundLock+')', width: containerWidth, height: containerHeight,}}></div>}
+      {/*{appSettings.lightBack==="true" && <div className='lockFuture' style={{ zIndex:4 , backgroundImage: 'url('+appSettings.backgroundLock+')', width: containerWidth, height: containerHeight,}}></div>}
       <p id="rotationNum" className='rotationNum' onDragStart={(event) => event.preventDefault()} 
             style={{color: appSettings.dialTextColor, fontSize:appSettings.dialTextSize, zIndex:5}}
-            >{rotationAngle/6}</p> 
+            >{rotationAngle/6}</p> */}
  
     </div>);
 };

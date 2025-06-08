@@ -3,11 +3,12 @@ export const DEFAULT_APP_SETTINGS = {
   actionAfterSolve: "NONE",
   message: undefined,
   keysType: "NUMBERS",
-  background: "images/standard/background4.png",
-  backgroundLock : "images/standard/background_lock_standard.png",
-  backgroundDial: "images/standard/dial_classic.png",
+  background: "images/standard/background.png",
+  backgroundLock : "images/standard/background_oscilloscope.png",
+  backgroundDial: "images/standard/dial.png",
   //backgroundKeypad: "images/standard/lock.png",
-  backgroundKey: "images/background_key.png",
+  //backgroundButton: "images/standard/button.png",
+  backgroundKey: "images/standard/button.png",
   numbers: ["1","2","3","4","5","6","7","8","9","✱","0","#"],
   letters: ["A","B","C","D","E","F","G","H","I","J","K","L"],
   colors : [
@@ -81,6 +82,11 @@ export const DEFAULT_APP_SETTINGS = {
   dialTextColor: "#000000", // Color for the dial text
 
   lightBack: "false", // Controls whether to show the image behind the dial frame
+
+  rayWidth: 0.59, // Relative width of the ray compared to the box width
+  rayHeight: 0.6, // Relative height of the ray compared to the box height
+  dialsGap: 0.19, // Gap between dials in percentage of box width
+  dialsNames: ["F", "W", "A",], // Names for the dials
 };
 
 export const SKIN_SETTINGS_RETRO = {

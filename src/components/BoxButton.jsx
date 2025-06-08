@@ -16,7 +16,7 @@ const BoxButton = (props) => {
   };
 
   return (
-    <div
+    /*<div
       className={"boxButton boxButton" + props.position}
       onClick={() => props.onClick(props.value)}
       style={{
@@ -26,6 +26,18 @@ const BoxButton = (props) => {
       }}
     >
       <div>{renderContent()}</div>
+    </div>*/
+    <div className={"boxButton boxButton"} onClick={() => props.onClick()} 
+        style={{ width: props.boxWidth *0.12 , height: props.boxHeight *0.12,
+          backgroundImage: 'url("' + appSettings.backgroundKey + '")',
+        position: "absolute",
+        //left: props.appwidth / 2 + props.boxWidth / 2 *0.4,
+        //bottom: props.appheight / 2 - props.boxHeight / 2 *0.8,
+        cursor: "pointer",
+        }}>
+      {/*<li>
+        <p>{props.value}</p>
+      </li>*/}
     </div>
   );
 };
