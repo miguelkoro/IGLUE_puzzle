@@ -3,11 +3,12 @@ export const DEFAULT_APP_SETTINGS = {
   actionAfterSolve: "NONE",
   message: undefined,
   keysType: "NUMBERS",
-  background: "images/standard/background4.png",
-  backgroundLock : "images/standard/background_lock_standard.png",
-  backgroundDial: "images/standard/dial_classic.png",
+  background: "images/standard/background.png",
+  backgroundTelephone : "images/standard/background_telephone.png",
+  backgroundDial: "images/standard/dial_telephone.png",
+  backgroundMarker: "images/standard/marker.png",
   //backgroundKeypad: "images/standard/lock.png",
-  backgroundKey: "images/background_key.png",
+  //backgroundKey: "images/standard.png",
   numbers: ["1","2","3","4","5","6","7","8","9","✱","0","#"],
   letters: ["A","B","C","D","E","F","G","H","I","J","K","L"],
   colors : [
@@ -71,9 +72,11 @@ export const DEFAULT_APP_SETTINGS = {
   imageLightNok: "images/standard/light_nok.png",
   imageLightOk: "images/standard/light_ok.png",
   //soundBeep: "sounds/beep.mp3",
-  soundNok: "sounds/solution_nok.mp3",
+  soundNok: "sounds/solution_nok.wav",
   soundOk: "sounds/solution_ok.mp3",
   soundDial: "sounds/spin.wav",
+  soundRetract: "sounds/retract.wav",
+
 
   dialWidth: 0.7, // Relative size of the dial compared to the box width
   dialHeight: 0.7, // Relative size of the dial compared to the box height
@@ -81,6 +84,8 @@ export const DEFAULT_APP_SETTINGS = {
   dialTextColor: "#000000", // Color for the dial text
 
   lightBack: "false", // Controls whether to show the image behind the dial frame
+
+  //
 };
 
 export const SKIN_SETTINGS_RETRO = {

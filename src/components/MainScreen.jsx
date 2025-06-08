@@ -7,7 +7,7 @@ import BoxButton from './BoxButton.jsx';
 const MainScreen = (props) => {
   const { escapp, appSettings, Utils, I18n } = useContext(GlobalContext);
   const [tries, setTries] = useState(0); // Contador de intentos
-  const [solutionArray, setSolutionArray] = useState([]); // Array para guardar la solución
+  //const [solutionArray, setSolutionArray] = useState([]); // Array para guardar la solución
   const [currentSolution, setCurrentSolution] = useState([]);
   const [processingSolution, setProcessingSolution] = useState(false);
   const [light, setLight] = useState("off");
@@ -27,6 +27,7 @@ const MainScreen = (props) => {
   const [isReseting, setIsReseting] = useState(false); // Estado para saber si se está reiniciando el lock
 
   //
+  const [password, setPassword] = useState("");
 
   const styles ={
     "STANDARD": {
@@ -77,15 +78,15 @@ const MainScreen = (props) => {
     let _lockWidth = Math.min(props.appHeight * aspectRatio, props.appWidth) ;
     let _lockHeight = _lockWidth / aspectRatio;
 
-    let _containerWidth = _lockWidth *0.8;
-    let _containerHeight = _lockHeight *0.8;
+    let _containerWidth = _lockWidth ;
+    let _containerHeight = _lockHeight ;
 
 
     let _containerMarginLeft=0;
     let _containerMarginTop=0;
 
-    let _boxWidth = _lockWidth * 0.7;
-    let _boxHeight = _lockHeight * 0.7;
+    let _boxWidth = _lockWidth * 0.37;
+    let _boxHeight = _lockHeight * 0.37;
 
     let _lightWidth;
     let _lightHeight;
@@ -179,16 +180,16 @@ const MainScreen = (props) => {
 
   const checkSolution = () => {
     setProcessingSolution(true);
-    Utils.log("Check solution", solutionArray);
-    const solution = solutionArray.join(';');
+    //Utils.log("Check solution", solutionArray);
+    //const solution = solutionArray.join(';');
     //const solution="12315"
     reset(); // Reinicia el lock
-    console.log("Check solution", solution);
-    escapp.checkNextPuzzle(solution, {}, (success, erState) => {
+    console.log("Check solution", password);
+    escapp.checkNextPuzzle(password, {}, (success, erState) => {
           Utils.log("Check solution Escapp response", success, erState);
           try {
             setTimeout(() => {
-              changeBoxLight(success, solution);
+              changeBoxLight(success, password);
             }, 700);
           } catch(e){
             Utils.log("Error in checkNextPuzzle",e);
@@ -233,10 +234,11 @@ const MainScreen = (props) => {
 
   const  reset = () =>{
     //console.log("Solution: ", solutionArray);
-    setIsReseting(true);
+    /*setIsReseting(true);
     setRotationAngle(0); // Reinicia el ángulo de rotación
     setSolutionArray([]);
-    //setTries(0);
+    //setTries(0);*/
+    setPassword("");
     setTimeout(() => {      
       setIsReseting(false);
     }, 2500);
@@ -245,65 +247,27 @@ const MainScreen = (props) => {
 
   useEffect(() => { // Comprueba si se ha alcanzado el número máximo de intentos (En local y en API)           
     //console.log("Tries: ", tries, "Solution: ", solutionArray);
-      solutionArray.length >= appSettings.solutionLength && checkSolution();
-      console.log("Solution: ", solutionArray);
-  }, [solutionArray]);
+      password.length >= appSettings.solutionLength && checkSolution();
+      console.log("Solution: ", password);
+  }, [password]);
 
   return (
     <div id="screen_main" className={"screen_content"} style={{ backgroundImage: backgroundImage }}>
       <div id="lockContainer" className="lockContainer" 
-        style={{backgroundImage: 'url('+appSettings.backgroundLock+')', width: containerWidth, 
-          height: containerHeight, marginTop: containerMarginTop, marginLeft: containerMarginLeft ,
+        style={{backgroundImage: 'url('+appSettings.backgroundTelephone+')', width: containerWidth, 
+          height: containerHeight, 
+          
           display: "flex", alignItems: "center", 
           justifyContent: "center", flexDirection: "column"
         }}>
-      {/*<div id="keypad" style={{ width: containerWidth, height: containerHeight, marginTop: containerMarginTop, marginLeft: containerMarginLeft }}>
-        <audio id="audio_beep" src={appSettings.soundBeep} autostart="false" preload="auto" />
-        <audio id="audio_failure" src={appSettings.soundNok} autostart="false" preload="auto" />
-        <audio id="audio_success" src={appSettings.soundOk} autostart="false" preload="auto" />
-        <div id="row1" className="row">
-          <BoxButton value={appSettings.keys[0]} position={1} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
-          <BoxButton value={appSettings.keys[1]} position={2} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
-          <BoxButton value={appSettings.keys[2]} position={3} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
-        </div>
-        <div id="row2" className="row">
-          <BoxButton value={appSettings.keys[3]} position={4} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
-          <BoxButton value={appSettings.keys[4]} position={5} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
-          <BoxButton value={appSettings.keys[5]} position={6} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
-        </div>
-        <div id="row3" className="row">
-          <BoxButton value={appSettings.keys[6]} position={7} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
-          <BoxButton value={appSettings.keys[7]} position={8} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
-          <BoxButton value={appSettings.keys[8]} position={9} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
-        </div>
-        <div id="row4" className="row">
-          <BoxButton value={appSettings.keys[9]} position={10} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
-          <BoxButton value={appSettings.keys[10]} position={11} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
-          <BoxButton value={appSettings.keys[11]} position={12} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
-        </div>
-        <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
-        <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
-        <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div> 
-      </div>*/}
-        <SafeBoxDial styles={style}
+          <SafeBoxDial
               boxWidth={boxWidth} boxHeight={boxHeight} checking={processingSolution} 
               rotationAngle={rotationAngle} setRotationAngle={setRotationAngle}
-              setSolutionArray={setSolutionArray} isReseting={isReseting}/>
-              
-      
-      <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
-      <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
-      <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div>
-      <audio id="audio_beep" src={appSettings.soundBeep} autostart="false" preload="auto" />
-      <audio id="audio_failure" src={appSettings.soundNok} autostart="false" preload="auto" />
-      <audio id="audio_success" src={appSettings.soundOk} autostart="false" preload="auto" />
+              setPassword={setPassword}/>
       </div>
-
-      {appSettings.lightBack==="true" && <div className='lockFuture' style={{ zIndex:4 , backgroundImage: 'url('+appSettings.backgroundLock+')', width: containerWidth, height: containerHeight,}}></div>}
-      <p id="rotationNum" className='rotationNum' onDragStart={(event) => event.preventDefault()} 
-            style={{color: appSettings.dialTextColor, fontSize:appSettings.dialTextSize, zIndex:5}}
-            >{rotationAngle/6}</p> 
- 
+        
+        <audio id="audio_success" src={appSettings.soundOk} preload="auto"></audio>
+        <audio id="audio_failure" src={appSettings.soundNok} preload="auto"></audio>
     </div>);
 };
 
