@@ -51,10 +51,13 @@ const  SafeBoxDial = ( props ) => {
     };
 
     const getNumber = (angle) => {
-      //if(angle >0 && angle <= 60)console.log("nada");
+      props.setPassword((prevPassword) => prevPassword + findNumber(angle)); // Concatena el número al estado `password`
+    }
+
+    const findNumber = (angle) => {
       let number=""
-      let angleMultiplier= 30;
-      let initialAngle = 50;
+      let angleMultiplier= appSettings.angleMultiplier; // Multiplicador de ángulo para dividir el dial en 10 partes
+      let initialAngle = appSettings.initialAngle; // Ángulo inicial del dial
       if(angle > initialAngle && angle <= initialAngle+angleMultiplier*1)number="1";
       else if(angle > initialAngle+angleMultiplier*1 && angle <= initialAngle+angleMultiplier*2)number="2";
       else if(angle > initialAngle+angleMultiplier*2 && angle <= initialAngle+angleMultiplier*3)number="3";
@@ -65,7 +68,7 @@ const  SafeBoxDial = ( props ) => {
       else if(angle > initialAngle+angleMultiplier*7 && angle <= initialAngle+angleMultiplier*8)number="8";
       else if(angle > initialAngle+angleMultiplier*8 && angle <= initialAngle+angleMultiplier*9)number="9";
       else if(angle > initialAngle+angleMultiplier*9)number="0";
-      props.setPassword((prevPassword) => prevPassword + number); // Concatena el número al estado `password`
+      return number;
     }
 
     const handleMouseDown = (event) => {
@@ -77,7 +80,7 @@ const  SafeBoxDial = ( props ) => {
       };
 
     const calculateAngle = (event) => {
-        const lockElement = document.getElementById("lock");
+        const lockElement = document.getElementById("dial");
         const rect = lockElement.getBoundingClientRect();  
         // Calcula el centro del div
         const centerX = rect.left + rect.width / 2;
@@ -119,48 +122,26 @@ const  SafeBoxDial = ( props ) => {
         }}, [isReseting]); // Se ejecuta cuando isReseting cambia
 
       return(
-          <div className='lockContainer' style={{// width: props.boxWidth , height: props.boxHeight ,  
+          <div className='dialContainer' style={{// width: props.boxWidth , height: props.boxHeight ,  
               width: props.boxWidth, 
-              height: props.boxHeight, 
-              alignItems: "center",
-              justifyContent: "center",
-              position: "relative",}}
+              height: props.boxHeight, }}
               onDragStart={(event) => event.preventDefault()
             } onMouseUp={handleMouseUp} 
             onMouseDown={handleMouseDown} 
             onMouseMove={handleMouseMove}>
             
-              <div id="lock" style={{ 
+              <div id='dial' className='dial' style={{ 
                 width: props.boxWidth, // Usa el menor valor para asegurar que sea cuadrado
                 height: props.boxHeight, // Usa el menor valor para asegurar que sea cuadrado
-                //marginLeft: props.boxWidth / 2 * 0.225,
-                //marginBottom: props.boxHeight / 2 * 0.4,
                 backgroundImage: `url(${appSettings.backgroundDial})`, // Cambia la imagen de fondo según el skin
-                position: "absolute", // Posiciona el <div> absolutamente dentro del contenedor
-                //top: "12%", // Centra verticalmente
-                //left: "21%", // Centra horizontalmente
-                //marginTop: props.boxHeight / 2 * 0.6,
                 transform: `rotate(${props.rotationAngle}deg)`, // Rotación dinámica.
-                pointerEvents: "none", // Permite que los eventos del mouse pasen a través del <p>
                 transition: isReseting ? "transform 1.3s ease" : "none", // Transición suave solo durante el reset
-              }}></div>
-              {/*<p id="rotationNum" className='rotationNum' onDragStart={(event) => event.preventDefault()} 
-                style={{position: "absolute", // Posiciona el <p> absolutamente dentro del contenedor
-                  top: "50%", // Centra verticalmente
-                  left: "50%", // Centra horizontalmente
-                  transform: "translate(-50%, -50%)", // Ajusta el centrado
-                  margin: 0, // Elimina el margen del <p>
-                  pointerEvents: "none", // Permite que los eventos del mouse pasen a través del <p>
-                  color: "black", // Cambia el color del texto
-                  userSelect: "none", // Evita que el texto sea seleccionable
-                  fontStyle: "bold", // Aplica el estilo en negrita
-                  fontSize : "13vmin", // Cambia el tamaño de la fuente
-                }}>{props.rotationAngle/2}</p>*/}
+              }}/>
                 <div className="pivote" style={{
                   backgroundImage: `url(${appSettings.backgroundMarker})`, // Cambia la imagen de fondo según el skin
                   width: props.boxWidth * 0.9, // Usa el menor valor para asegurar que sea cuadrado
                   height: props.boxHeight * 0.9,
-                }}></div>     
+                }}/>
                 <audio id="audio_wheel" src={appSettings.soundDial} autostart="false" preload="auto" />
                 <audio id="audio_return" src={appSettings.soundRetract} autostart="false" preload="auto" />     
           </div>

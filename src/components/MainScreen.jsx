@@ -3,6 +3,7 @@ import { GlobalContext } from "./GlobalContext";
 import './../assets/scss/main.scss';
 import SafeBoxDial from './SafeBoxDial.jsx';
 import BoxButton from './BoxButton.jsx';
+import Number from './Number.jsx';
 
 const MainScreen = (props) => {
   const { escapp, appSettings, Utils, I18n } = useContext(GlobalContext);
@@ -143,7 +144,7 @@ const MainScreen = (props) => {
     setLightTop(_lightTop);
   }
 
-  const onClickButton = (value) => {
+  /*const onClickButton = (value) => {
     if (processingSolution) {
       return;
     }
@@ -176,7 +177,7 @@ const MainScreen = (props) => {
         });
       }
     }, 300);
-  }
+  }*/
 
   const checkSolution = () => {
     setProcessingSolution(true);
@@ -184,7 +185,7 @@ const MainScreen = (props) => {
     //const solution = solutionArray.join(';');
     //const solution="12315"
     reset(); // Reinicia el lock
-    console.log("Check solution", password);
+    Utils.log("Check solution", password);
     escapp.checkNextPuzzle(password, {}, (success, erState) => {
           Utils.log("Check solution Escapp response", success, erState);
           try {
@@ -199,13 +200,13 @@ const MainScreen = (props) => {
 
   const changeBoxLight = (success, solution) => {
     let audio;
-    let afterChangeBoxLightDelay = 1000;
-    appSettings.skin === "RETRO" ? afterChangeBoxLightDelay = 4500 : afterChangeBoxLightDelay = 1500;
+    let afterChangeBoxLightDelay = 2000;
+    //appSettings.skin === "RETRO" ? afterChangeBoxLightDelay = 4500 : afterChangeBoxLightDelay = 1500;
 
-    if (success) {
-      audio = document.getElementById("audio_success");
+    if (success) {      
       setLight("ok");
-      afterChangeBoxLightDelay = (appSettings.skin === "RETRO" ? 4500 : 1500);
+      audio = document.getElementById("audio_success");
+      //afterChangeBoxLightDelay = (appSettings.skin === "RETRO" ? 4500 : 1500);
     } else {
       audio = document.getElementById("audio_failure");
       setLight("nok");
@@ -216,12 +217,20 @@ const MainScreen = (props) => {
       if(!success){
         setLight("off");
         setProcessingSolution(false);
-      }else{
+        //audio.play();
+      }else{        
         //props.onKeypadSolved(solution); //Cambiar
+        //audio.play();
       }
     }, afterChangeBoxLightDelay);
 
-    audio.play();
+    if(success){
+      audio.play();
+      setTimeout(() => {     
+       // props.onKeypadSolved(solution); //Cambiar
+      }, appSettings.delaySoundOk);
+    }else
+      audio.play();
   }
 
   //Pone la imagen del fondo
@@ -248,18 +257,25 @@ const MainScreen = (props) => {
   useEffect(() => { // Comprueba si se ha alcanzado el número máximo de intentos (En local y en API)           
     //console.log("Tries: ", tries, "Solution: ", solutionArray);
       password.length >= appSettings.solutionLength && checkSolution();
-      console.log("Solution: ", password);
+      Utils.log("Solution: ", password);
   }, [password]);
 
   return (
     <div id="screen_main" className={"screen_content"} style={{ backgroundImage: backgroundImage }}>
-      <div id="lockContainer" className="lockContainer" 
-        style={{backgroundImage: 'url('+appSettings.backgroundTelephone+')', width: containerWidth, 
-          height: containerHeight, 
-          
-          display: "flex", alignItems: "center", 
-          justifyContent: "center", flexDirection: "column"
-        }}>
+      <div id="telephoneContainer" className="telephoneContainer" 
+        style={{backgroundImage: 'url('+appSettings.backgroundTelephone+')', width: containerWidth, height: containerHeight, }}>
+          <div className='numbersContainer' style={{ width: props.boxWidth, height: props.boxHeight, }}>
+             <Number right={"40.5%"} top={"39.5%"} value={0}/>
+             <Number right={"44.5%"} top={"35.5%"} value={1}/>
+             <Number right={"49.5%"} top={"34%"} value={2}/>
+             <Number right={"54.5%"} top={"36%"} value={3}/>
+             <Number right={"58%"} top={"41%"} value={4}/>
+             <Number right={"59%"} top={"47.5%"} value={5}/>
+             <Number right={"57.5%"} top={"54%"} value={6}/>
+             <Number right={"54%"} top={"58.5%"} value={7}/>
+             <Number right={"49%"} top={"60%"} value={8}/>
+             <Number right={"44.5%"} top={"59%"} value={9}/>
+          </div>
           <SafeBoxDial
               boxWidth={boxWidth} boxHeight={boxHeight} checking={processingSolution} 
               rotationAngle={rotationAngle} setRotationAngle={setRotationAngle}

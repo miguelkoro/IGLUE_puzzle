@@ -63,9 +63,9 @@ div.boxButton div {
 }
 
 div.boxButton div img.symbol {
-  align-self: center;
-	max-height: 55%;
-  max-width: 55%;
+ /* align-self: center;
+	max-height: 5%;
+  max-width: 5%;*/
 }
 
 div.retro div.boxButton div {
@@ -94,65 +94,61 @@ div.retro div.boxLight {
 
 ///////
 
-.lockContainer{
+.dialContainer{
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: contain;
 	display: flex;
 	position: absolute;
-	//pointer-events: none;
-	//z-index: -1;
-	//top: 21%;
 	transform: (-50%, - 50px); // Centra el lock en la pantalla
-	//z-index: 1;
-	//position: relative;
+	align-items: center;
+	justify-content: center;
 }
 
-/*div#lock{
-	//background-image: url("../images/lock.png");
+.telephoneContainer{
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: contain;
 	display: flex;
 	position: absolute;
-	//position: relative;
-	pointer-events: none;
-	//position: absolute;
-	//z-index: 2;
-	//top: 21%;
-	//z-index: -500;
 	transform: (-50%, - 50px); // Centra el lock en la pantalla
-}*/
-div.lockFuture{
-	background-position: center;
-	background-repeat: no-repeat;
-	background-size: contain;
 	display: flex;
-	position: absolute;
-	pointer-events: none;
-	//z-index: -1;
-	//top: 21%;
-	transform: (-50%, - 50px); // Centra el lock en la pantalla
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 }
 
-div#lock{
-	//background-image: url("../images/Telephone_dial.png");
+
+.dial{
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: contain;
 	display: flex;
+	pointer-events: none;
+	position: absolute;
 }
 //
 
 div.pivote{
-	//background-image: url("../images/telefono2.png");
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: contain;
-	//width: 58vmin;
 	display: flex;
-	//height: 60vmin;
 	position: absolute;
-	//top: 15%; // Centra verticalmente
-	//left: 14%; // Centra horizontalmente
+}
+
+.number{
+	font-size:2vmin;
+	color:white;
+	//right: "41%" , top: "40%", 
+	position:absolute; 
+	font-family: Georgia, serif;
+}
+
+.numberContainer{
+	display: flex;
+	position: relative;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
