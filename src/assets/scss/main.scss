@@ -105,10 +105,22 @@ div.retro div.boxLight {
 	//pointer-events: none;
 	//z-index: -1;
 	//top: 21%;
-	transform: (-50%, - 50px); // Centra el lock en la pantalla
+	//transform: (-50%, - 50px); // Centra el lock en la pantalla
 	//z-index: 1;
 	//position: relative;
 }
+
+.screenContainer{
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: contain;
+	display: flex;
+	position: absolute;
+	justify-content:center;
+	align-content:center;
+	align-items: center; 
+}
+
 div.dial{
 	background-image: url("../images/dial.png");
 	background-position: center;

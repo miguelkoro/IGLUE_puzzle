@@ -6,6 +6,9 @@ export const DEFAULT_APP_SETTINGS = {
   background: "images/standard/background.png",
   backgroundLock : "images/standard/background_oscilloscope.png",
   backgroundDial: "images/standard/dial.png",
+
+  backgroundNok: "images/standard/background_nok.png",
+  backgroundOk: "images/standard/background_ok.png",
   //backgroundKeypad: "images/standard/lock.png",
   //backgroundButton: "images/standard/button.png",
   backgroundKey: "images/standard/button.png",
@@ -87,6 +90,8 @@ export const DEFAULT_APP_SETTINGS = {
   rayHeight: 0.6, // Relative height of the ray compared to the box height
   dialsGap: 0.19, // Gap between dials in percentage of box width
   dialsNames: ["F", "W", "A",], // Names for the dials
+
+  svgSize: '25vmin',
 };
 
 export const SKIN_SETTINGS_RETRO = {
