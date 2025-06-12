@@ -7,9 +7,8 @@ import Number from './Number.jsx';
 
 const MainScreen = (props) => {
   const { escapp, appSettings, Utils, I18n } = useContext(GlobalContext);
-  const [tries, setTries] = useState(0); // Contador de intentos
   //const [solutionArray, setSolutionArray] = useState([]); // Array para guardar la solución
-  const [currentSolution, setCurrentSolution] = useState([]);
+  //const [currentSolution, setCurrentSolution] = useState([]);
   const [processingSolution, setProcessingSolution] = useState(false);
   const [light, setLight] = useState("off");
   const [containerWidth, setContainerWidth] = useState(0);//
@@ -30,37 +29,7 @@ const MainScreen = (props) => {
   //
   const [password, setPassword] = useState("");
 
-  const styles ={
-    "STANDARD": {
-      //lock: "../images/standard/lock_classic.png",
-      //dial: "images/standard/dial_classic.png",
-      //dial_size: 0.4,
-      //dial_sound: "sounds/spin.wav",
-      dial_text_color: "#000000",
-      dial_text_size: "13vmin",
-      //dial_text_zIndex: 1,
-    },
-    "RETRO": {
-      //lock: "images/lock_old.png",
-      //dial: "images/dial_old.png",
-      //dial_size: 0.5,
-      //dial_sound: "sounds/spin_old2.wav",
-      dial_text_color:  "#FFFFFF",
-      dial_text_size: "10vmin",
-      //dial_text_zIndex: 1,
-    },
-    "FUTURISTIC": {
-      //lock: "images/lock_modern.png",
-      //dial: "images/dial_modern.png",
-      //dial_size: 0.6,
-      dial_sound: "sounds/spin.wav",
-      dial_text_color: "#59c2ca",
-     // dial_text_size: "11vmin",
-      //dial_text_zIndex: -1,
-    }
-  }
-  const defaultStyle = styles["STANDARD"];
-  const style = styles[appSettings.skin] || styles["STANDARD"];
+  
 //
 
   useEffect(() => {
@@ -99,8 +68,6 @@ const MainScreen = (props) => {
     switch(appSettings.skin){
       case "RETRO":
         _containerMarginTop = 0;
-       // _containerMarginLeft = 0;
-        //_containerWidth = _lockWidth *0.45;
         _containerHeight = _lockHeight *0.55;
         _lightWidth = _lockWidth * 0.18;
         _lightHeight = _lockHeight *0.18;
@@ -108,22 +75,15 @@ const MainScreen = (props) => {
         _lightTop =  _lockHeight * -0.14;
         break;
       case "FUTURISTIC":
-        _containerMarginTop = 0;//_lockHeight*0;
-        //_containerMarginLeft = _lockWidth * -0.065;
-       // _containerWidth = _lockWidth *0.;
+        _containerMarginTop = 0;
         _containerHeight = _lockHeight *0.605;
-         _lightWidth = _lockWidth*0.9;
+        _lightWidth = _lockWidth*0.9;
         _lightHeight = _lockHeight*0.6;
-        //_lightLeft = props.appWidth / 2 + _lockWidth / 2 * 0;
-        //_lightTop = props.appHeight / 2 - _lockHeight / 2 * 0.9;
         _boxHeight = _lockHeight * 0.9;
         _boxWidth = _lockWidth * 0.9;
 
         break;
       default:
-        //Standard skin
-       // _containerMarginTop = 0;
-        //_containerMarginLeft = _keypadWidth * 0;
         _lightWidth = _lockWidth * 0.08;
         _lightHeight = _lockHeight * 0.08;
         _lightLeft =  _lockWidth  * 0.33;
@@ -181,9 +141,6 @@ const MainScreen = (props) => {
 
   const checkSolution = () => {
     setProcessingSolution(true);
-    //Utils.log("Check solution", solutionArray);
-    //const solution = solutionArray.join(';');
-    //const solution="12315"
     reset(); // Reinicia el lock
     Utils.log("Check solution", password);
     escapp.checkNextPuzzle(password, {}, (success, erState) => {
@@ -201,12 +158,9 @@ const MainScreen = (props) => {
   const changeBoxLight = (success, solution) => {
     let audio;
     let afterChangeBoxLightDelay = 2000;
-    //appSettings.skin === "RETRO" ? afterChangeBoxLightDelay = 4500 : afterChangeBoxLightDelay = 1500;
-
     if (success) {      
       setLight("ok");
       audio = document.getElementById("audio_success");
-      //afterChangeBoxLightDelay = (appSettings.skin === "RETRO" ? 4500 : 1500);
     } else {
       audio = document.getElementById("audio_failure");
       setLight("nok");
@@ -217,10 +171,6 @@ const MainScreen = (props) => {
       if(!success){
         setLight("off");
         setProcessingSolution(false);
-        //audio.play();
-      }else{        
-        //props.onKeypadSolved(solution); //Cambiar
-        //audio.play();
       }
     }, afterChangeBoxLightDelay);
 
@@ -234,7 +184,6 @@ const MainScreen = (props) => {
   }
 
   //Pone la imagen del fondo
-  //let backgroundImage = 'url("' + appSettings.backgroundKeypad + '")';
   let backgroundImage = 'url("' + appSettings.background + '")';
   if(appSettings.background && appSettings.background !== "NONE"){
     backgroundImage += ', url("' + appSettings.background + '")';
@@ -242,16 +191,10 @@ const MainScreen = (props) => {
 
 
   const  reset = () =>{
-    //console.log("Solution: ", solutionArray);
-    /*setIsReseting(true);
-    setRotationAngle(0); // Reinicia el ángulo de rotación
-    setSolutionArray([]);
-    //setTries(0);*/
     setPassword("");
     setTimeout(() => {      
       setIsReseting(false);
     }, 2500);
-    //setChecking(false);
   }
 
   useEffect(() => { // Comprueba si se ha alcanzado el número máximo de intentos (En local y en API)           
