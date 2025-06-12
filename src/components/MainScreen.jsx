@@ -111,8 +111,8 @@ const MainScreen = (props) => {
       default:
         _lightWidth = _lockWidth * 0.08;
         _lightHeight = _lockHeight * 0.08;
-        _lightLeft =  _lockWidth  * 0.75;
-        _lightTop =  _lockHeight  * 0.05
+        _lightLeft =  _lockWidth  * 0.61;
+        _lightTop =  _lockHeight  * 0.03
     }
 
     setContainerWidth(_containerWidth);
@@ -213,7 +213,7 @@ const MainScreen = (props) => {
             <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div>
 
             <div className={"boxButton boxButton"} onClick={() => !processingSolution && checkSolution()} 
-              style={{ width: boxWidth *0.12 , height: boxHeight *0.12, marginTop: boxHeight * -0.05, marginLeft: boxWidth * 0.8,
+              style={{ width: boxWidth * appSettings.buttonWidth , height: boxHeight *appSettings.buttonHeight, marginTop: boxHeight * appSettings.buttonMarginTop, marginLeft: boxWidth * appSettings.buttonMarginLeft,
               backgroundImage: 'url("' + appSettings.backgroundKey + '")', position: "absolute", cursor: "pointer",
             }}/>
         </div>

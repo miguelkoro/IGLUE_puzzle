@@ -3,7 +3,7 @@ export const DEFAULT_APP_SETTINGS = {
   actionAfterSolve: "NONE",
   message: undefined,
   keysType: "NUMBERS",
-  background: "images/standard/background.png",
+  background: "images/standard/background3.png",
   backgroundLock : "images/standard/background_oscilloscope.png",
   backgroundDial: "images/standard/dial.png",
 
@@ -88,6 +88,12 @@ export const DEFAULT_APP_SETTINGS = {
 
   rayWidth: 0.59, // Relative width of the ray compared to the box width
   rayHeight: 0.6, // Relative height of the ray compared to the box height
+
+  buttonWidth: 0.15, // Relative width of the button compared to the box width
+  buttonHeight: 0.15, // Relative height of the button compared to the box height
+  buttonMarginTop: -0.05, // Margin from the top of the box to the button in percentage of box height
+  buttonMarginLeft: 0.8, // Margin from the left of the box to the button in percentage of box width
+
   dialsGap: 0.19, // Gap between dials in percentage of box width
   dialsNames: ["F", "W", "A",], // Names for the dials
 
