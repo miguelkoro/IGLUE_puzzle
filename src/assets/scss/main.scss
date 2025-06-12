@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,709;1,709&display=swap');
 div#screen_main {
 	background-position: center;
 	background-repeat: no-repeat;
@@ -62,11 +63,7 @@ div.boxButton div {
   cursor: pointer; 
 }
 
-div.boxButton div img.symbol {
- /* align-self: center;
-	max-height: 5%;
-  max-width: 5%;*/
-}
+
 
 div.retro div.boxButton div {
   padding-top: 0.5px;
@@ -142,7 +139,7 @@ div.pivote{
 	color:white;
 	//right: "41%" , top: "40%", 
 	position:absolute; 
-	font-family: Georgia, serif;
+	font-family: "Roboto", sans-serif;
 }
 
 .numberContainer{

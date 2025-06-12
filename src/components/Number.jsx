@@ -21,7 +21,7 @@ const Number = (props) => {
     };
     return (
         
-            <div style={{fontSize: appSettings.fontSize, color:appSettings.fontColor, right: props.right , top: props.top, position:"absolute"}}>
+            <div className='number' style={{fontSize: appSettings.fontSize, color:appSettings.fontColor, right:appSettings.numbersPosition[props.value].right , top: appSettings.numbersPosition[props.value].top, position:"absolute"}}>
               {renderContent()}
             </div>
           

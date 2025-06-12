@@ -265,16 +265,16 @@ const MainScreen = (props) => {
       <div id="telephoneContainer" className="telephoneContainer" 
         style={{backgroundImage: 'url('+appSettings.backgroundTelephone+')', width: containerWidth, height: containerHeight, }}>
           <div className='numbersContainer' style={{ width: props.boxWidth, height: props.boxHeight, }}>
-             <Number right={"40.5%"} top={"39.5%"} value={0}/>
-             <Number right={"44.5%"} top={"35.5%"} value={1}/>
-             <Number right={"49.5%"} top={"34%"} value={2}/>
-             <Number right={"54.5%"} top={"36%"} value={3}/>
-             <Number right={"58%"} top={"41%"} value={4}/>
-             <Number right={"59%"} top={"47.5%"} value={5}/>
-             <Number right={"57.5%"} top={"54%"} value={6}/>
-             <Number right={"54%"} top={"58.5%"} value={7}/>
-             <Number right={"49%"} top={"60%"} value={8}/>
-             <Number right={"44.5%"} top={"59%"} value={9}/>
+             <Number value={0}/>
+             <Number value={1}/>
+             <Number value={2}/>
+             <Number value={3}/>
+             <Number value={4}/>
+             <Number value={5}/>
+             <Number value={6}/>
+             <Number value={7}/>
+             <Number value={8}/>
+             <Number value={9}/>
           </div>
           <SafeBoxDial
               boxWidth={boxWidth} boxHeight={boxHeight} checking={processingSolution} 
