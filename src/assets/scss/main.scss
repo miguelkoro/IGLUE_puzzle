@@ -31,6 +31,10 @@ div.boxButton {
 	background-size: contain;
 	display: flex;
 	color: white;
+	position: absolute;
+	flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 div.boxButton:active {
@@ -54,6 +58,7 @@ div.boxButton div {
 	height: 100%;
 	text-align: center;
 	font-size: 4vmin;
+	position: absolute;
 	font-family: "Consolas", "Roboto", sans-serif;
   -webkit-touch-callout: none;
   -webkit-user-select: none;

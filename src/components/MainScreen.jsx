@@ -31,6 +31,7 @@ const MainScreen = (props) => {
   const frequencyMapped = mapRange(frequency/3, 0, 119, 0.2, 0.5); // Frecuencia entre 0.6 y 4.2
   const wavelengthMapped = mapRange(wavelength/3, 0, 119, 10, 80); // Wavelength entre 10 y 80
   const amplitudeMapped = mapRange(amplitude/3, 0, 119, 25, 80); // Amplitud entre 25 y 80
+  const [waveType, setWaveType] = useState("sine"); // Tipo de onda, por defecto es "sine"; "square", "triangle", "sawtooth"
 
   const [isReseting, setIsReseting] = useState(false); // Estado para saber si se está reiniciando el lock
 
@@ -74,7 +75,7 @@ const MainScreen = (props) => {
     let _containerHeight = _lockHeight *0.8;
 
 
-    let _containerMarginLeft=0.1 * _lockWidth;
+    let _containerMarginLeft=0.03 * _lockWidth;
     let _containerMarginTop=0.68 * _lockHeight;
 
     let _boxWidth = _lockWidth * 0.7;
@@ -133,9 +134,11 @@ const MainScreen = (props) => {
     if (processingSolution) {
       return;
     }
+
     setProcessingSolution(true);
     Utils.log("Check solution", [ frequency/3, wavelength/3, amplitude/3]);
-    const solution = [ frequency/3, wavelength/3, amplitude/3].join(';');
+    let solution = [ frequency/3, wavelength/3, amplitude/3].join(';');
+    if (appSettings.dialMode === "MULTI") solution = [waveType, frequency/3, wavelength/3, amplitude/3].join(';');
     console.log("Check solution", solution);
     escapp.checkNextPuzzle(solution, {}, (success, erState) => {
           Utils.log("Check solution Escapp response", success, erState);
@@ -170,8 +173,8 @@ const MainScreen = (props) => {
         //props.onKeypadSolved(solution); //Cambiar
       }
     }, afterChangeBoxLightDelay);
-
-    audio.play();
+    
+    !success ? audio.play() : playFrequency(frequencyMapped); // Reproduce el sonido de la frecuencia
   }
 
   //Pone la imagen del fondo
@@ -190,12 +193,37 @@ const MainScreen = (props) => {
       setIsReseting(false);
     }, 2500);
   }
+  //https://www.cirruslabs.io/blog1/modernized-technology/quick-start-to-generate-tones-in-javascript
+  
+const playFrequency = (frequency) => {
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const oscillator = audioContext.createOscillator();
+  oscillator.type = waveType; // "sine", "square", "triangle", "sawtooth"
+  oscillator.frequency.value = frequency * 1000; // Ajusta según tu escala
+
+  oscillator.connect(audioContext.destination);
+  oscillator.start();
+
+  // Detén el sonido después de 0.5 segundos (ajusta si quieres)
+  setTimeout(() => {
+    oscillator.stop();
+    audioContext.close();
+  }, 1000);
+};
+
+const changeWaveType = () => {
+  const waveTypes = ["sine", "square", "triangle", "sawtooth"];
+  const currentIndex = waveTypes.indexOf(waveType);
+  const nextIndex = (currentIndex + 1) % waveTypes.length;
+  setWaveType(waveTypes[nextIndex]);
+  Utils.log("Wave type changed to", waveTypes[nextIndex]);
+}
 
 
   return (
     <div id="screen_main" className={"screen_content"} style={{ backgroundImage: backgroundImage }}>
         <div className="lockContainer" style={{backgroundImage: 'url('+appSettings.backgroundLock+')', width: containerWidth, height: containerHeight}}>
-            <div style={{  display: "flex",alignItems: "center",marginTop: containerMarginTop, marginLeft: containerMarginLeft }}>
+            <div style={{  display: "flex",position:'absolute',alignItems: "center",marginTop: containerMarginTop, marginLeft: containerMarginLeft}}>
                 <Dial id={"dial-frequency"} boxWidth={boxWidth} boxHeight={boxHeight} checking={processingSolution} 
                   rotationAngle={frequency} setRotationAngle={setFrequency} isReseting={isReseting}
                   xPosition={boxWidth*appSettings.dialsGap*1} name={appSettings.dialsNames[0]}/>
@@ -206,7 +234,7 @@ const MainScreen = (props) => {
                   rotationAngle={amplitude} setRotationAngle={setAmplitude} isReseting={isReseting}
                   xPosition={boxWidth*appSettings.dialsGap*3} name={appSettings.dialsNames[2]}/>              
             </div>    
-            {light!=="nok" && <Ray boxHeight={boxHeight} boxWidth={boxWidth} checking={processingSolution} 
+            {light!=="nok" && <Ray boxHeight={boxHeight} boxWidth={boxWidth} checking={processingSolution} waveType={waveType}
                   frequency={frequencyMapped} amplitude={amplitudeMapped} wavelength={wavelengthMapped}/>}
             <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
             <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
@@ -214,8 +242,13 @@ const MainScreen = (props) => {
 
             <div className={"boxButton boxButton"} onClick={() => !processingSolution && checkSolution()} 
               style={{ width: boxWidth * appSettings.buttonWidth , height: boxHeight *appSettings.buttonHeight, marginTop: boxHeight * appSettings.buttonMarginTop, marginLeft: boxWidth * appSettings.buttonMarginLeft,
-              backgroundImage: 'url("' + appSettings.backgroundKey + '")', position: "absolute", cursor: "pointer",
+              backgroundImage: 'url("' + appSettings.backgroundKey + '")',
             }}/>
+
+            {appSettings.dialMode==="MULTI" && <div className={"boxButton boxButton"} onClick={() => !processingSolution && changeWaveType()} 
+              style={{ width: boxWidth * 0.1 , height: boxHeight *0.1, marginTop: boxHeight * 0.75, marginLeft: boxWidth * 0.16,
+              backgroundImage: 'url("' + appSettings.modeButton + '")', 
+            }}><p style={{ margin: 0, marginTop: "9vmin", textAlign: "center", fontSize:"1.5vmin", color:"white" , pointerEvents:'none'}}>MODE</p></div>}
         </div>
         {light==="nok" && <div className="screenContainer" style={{backgroundImage: 'url('+appSettings.backgroundNok+')',  marginTop: boxHeight*-0.256,
             width: containerWidth*0.543, height: containerHeight*0.543, }}>

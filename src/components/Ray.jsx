@@ -21,19 +21,31 @@ const Ray = (props) => {
         for (let x = 0; x < width; x++) {
             // Calcular el factor de escala basado en la distancia al centro
             const distanceFromCenter = Math.abs(x - centerX) / centerX; // Normalizado entre 0 y 1
-            const scale = 1 - distanceFromCenter; // Más cerca del centro = mayor escala
+            //const scale = 1 - distanceFromCenter; // Más cerca del centro = mayor escala
+            const scale = Math.sin((1 - distanceFromCenter) * Math.PI / 2);
 
             // Ajustar amplitud, longitud de onda y frecuencia según el factor de escala
             const scaledAmplitude = maxAmplitude * scale;
             const scaledWavelength = maxWavelength * scale;
             const scaledFrequency = maxFrequency * scale;
 
-            // Calcular la posición vertical (y) de la onda
-            const y =
-                height / 2 +
-                scaledAmplitude *
-                Math.sin((2 * Math.PI * scaledFrequency * (x + offset)) / scaledWavelength);
+            const phase = (2 * Math.PI * scaledFrequency * (x + offset)) / scaledWavelength;
 
+            let waveValue = 0;
+            if (props.waveType === "square") {
+                waveValue = Math.sign(Math.sin(phase));
+            } else if (props.waveType === "triangle") {
+                // Onda triangular: valor entre -1 y 1
+                waveValue = 2 * Math.abs(2 * ((phase / (2 * Math.PI)) % 1) - 1) - 1;
+            } else if (props.waveType === "sawtooth") {
+                // Onda diente de sierra: valor entre -1 y 1
+                waveValue = 2 * ((phase / (2 * Math.PI)) % 1) - 1;
+            } else {
+                // Por defecto, seno
+                waveValue = Math.sin(phase);
+            }
+
+            const y = height / 2 + scaledAmplitude * waveValue;
             ctx.lineTo(x, y); // Dibuja la línea de la onda
         }
         ctx.stroke();
@@ -84,7 +96,7 @@ const Ray = (props) => {
         return () => {
             cancelAnimationFrame(animationRef.current); // Detiene la animación al desmontar el componente
         };
-    }, [props.boxWidth, props.boxHeight, props.frequency, props.amplitude, props.wavelength]); // Redibuja la onda cuando cambian los valores
+    }, [props.boxWidth, props.boxHeight, props.frequency, props.amplitude, props.wavelength, props.waveType]); // Redibuja la onda cuando cambian los valores
     
     return(<canvas
         ref={canvasRef}

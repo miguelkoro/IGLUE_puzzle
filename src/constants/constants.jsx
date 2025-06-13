@@ -6,7 +6,7 @@ export const DEFAULT_APP_SETTINGS = {
   background: "images/standard/background3.png",
   backgroundLock : "images/standard/background_oscilloscope.png",
   backgroundDial: "images/standard/dial.png",
-
+  modeButton: "images/standard/mode_button.png",
   backgroundNok: "images/standard/background_nok.png",
   backgroundOk: "images/standard/background_ok.png",
   //backgroundKeypad: "images/standard/lock.png",
@@ -91,11 +91,12 @@ export const DEFAULT_APP_SETTINGS = {
 
   buttonWidth: 0.15, // Relative width of the button compared to the box width
   buttonHeight: 0.15, // Relative height of the button compared to the box height
-  buttonMarginTop: -0.05, // Margin from the top of the box to the button in percentage of box height
+  buttonMarginTop: 0.85, // Margin from the top of the box to the button in percentage of box height
   buttonMarginLeft: 0.8, // Margin from the left of the box to the button in percentage of box width
 
   dialsGap: 0.19, // Gap between dials in percentage of box width
   dialsNames: ["F", "W", "A",], // Names for the dials
+  dialMode: "MULTI", // Dial mode can be "NORMAL" or "MULTI"
 
   svgSize: '25vmin',
 };
