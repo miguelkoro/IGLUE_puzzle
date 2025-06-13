@@ -28,9 +28,9 @@ const MainScreen = (props) => {
     return min2 + ((value - min1) * (max2 - min2)) / (max1 - min1);
   };
   // 0 a 120 son los valoreas que devuelven los diales, el resto son los rangos de valores que estoy dispuesto a poner
-  const frequencyMapped = mapRange(frequency/3, 0, 120, 0.4, 1); // Frecuencia entre 0.6 y 4.2
-  const wavelengthMapped = mapRange(wavelength/3, 0, 120, 10, 100); // Wavelength entre 10 y 100
-  const amplitudeMapped = mapRange(amplitude/3, 0, 120, 25, 100); // Amplitud entre 25 y 250
+  const frequencyMapped = mapRange(frequency/3, 0, 119, 0.2, 0.5); // Frecuencia entre 0.6 y 4.2
+  const wavelengthMapped = mapRange(wavelength/3, 0, 119, 10, 80); // Wavelength entre 10 y 80
+  const amplitudeMapped = mapRange(amplitude/3, 0, 119, 25, 80); // Amplitud entre 25 y 80
 
   const [isReseting, setIsReseting] = useState(false); // Estado para saber si se está reiniciando el lock
 
@@ -206,7 +206,7 @@ const MainScreen = (props) => {
                   rotationAngle={amplitude} setRotationAngle={setAmplitude} isReseting={isReseting}
                   xPosition={boxWidth*appSettings.dialsGap*3} name={appSettings.dialsNames[2]}/>              
             </div>    
-            {light==="off" && <Ray boxHeight={boxHeight} boxWidth={boxWidth} checking={processingSolution} 
+            {light!=="nok" && <Ray boxHeight={boxHeight} boxWidth={boxWidth} checking={processingSolution} 
                   frequency={frequencyMapped} amplitude={amplitudeMapped} wavelength={wavelengthMapped}/>}
             <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
             <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
@@ -220,7 +220,7 @@ const MainScreen = (props) => {
         {light==="nok" && <div className="screenContainer" style={{backgroundImage: 'url('+appSettings.backgroundNok+')',  marginTop: boxHeight*-0.256,
             width: containerWidth*0.543, height: containerHeight*0.543, }}>
             <svg xmlns="http://www.w3.org/2000/svg" height={appSettings.svgSize} viewBox="0 -960 960 960" width={appSettings.svgSize}
-                  fill="#FFFFFF" style={{filter: "drop-shadow(0 0 0.2rem #ff2d55) drop-shadow(0 0 0.4rem #ff2d55)"}}>
+                  fill="#FFFFFF" style={{zIndex: 10, filter: "drop-shadow(0 0 0.2rem #ff2d55) drop-shadow(0 0 0.4rem #ff2d55)"}}>
                   <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
               </svg>
         </div>}
@@ -228,7 +228,7 @@ const MainScreen = (props) => {
         {light==="ok" && <div className="screenContainer" style={{backgroundImage: 'url('+appSettings.backgroundOk+')',  marginTop: boxHeight*-0.256,
             width: containerWidth*0.543, height: containerHeight*0.543, }}>
             <svg xmlns="http://www.w3.org/2000/svg" height={appSettings.svgSize} viewBox="0 -960 960 960" width={appSettings.svgSize}
-                  fill="#FFFFFF" style={{filter: "drop-shadow(0 0 0.2rem rgb(69, 255, 45)) drop-shadow(0 0 0.4rem rgb(45, 255, 80))"}}>
+                  fill="#FFFFFF" style={{zIndex: 10,filter: "drop-shadow(0 0 0.2rem rgb(69, 255, 45)) drop-shadow(0 0 0.4rem rgb(45, 255, 80))"}}>
                   <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
               </svg>
         </div>}
