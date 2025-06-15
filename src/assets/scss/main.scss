@@ -8,7 +8,6 @@ div#screen_main {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	//z-index: 1;
 	position: relative;
 }
 
@@ -35,6 +34,7 @@ div.boxButton {
 	flex-direction: column;
     align-items: center;
     justify-content: center;
+	cursor: pointer;
 }
 
 div.boxButton:active {
@@ -54,8 +54,7 @@ div.boxButton div {
 	justify-content: center;
 	align-content: center;
 	flex-direction: column;
-	width: 100%;
-	height: 100%;
+
 	text-align: center;
 	font-size: 4vmin;
 	position: absolute;
@@ -105,14 +104,8 @@ div.retro div.boxLight {
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: contain;
-	//display: flex;
 	position: absolute;
-	//pointer-events: none;
-	//z-index: -1;
-	//top: 21%;
-	//transform: (-50%, - 50px); // Centra el lock en la pantalla
-	//z-index: 1;
-	//position: relative;
+	//cursor: pointer;
 }
 
 .screenContainer{
@@ -123,8 +116,7 @@ div.retro div.boxLight {
 	position: absolute;
 	justify-content:center;
 	align-content:center;
-	align-items: center; 
-	
+	align-items: center; 	
 }
 
 div.dial{
@@ -132,10 +124,7 @@ div.dial{
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: contain;
-	/*display: flex;*/
-	/*position: relative;*/
 	pointer-events: none;
-	//top: 21%;
 }
 
 p#rotationNum{
@@ -156,23 +145,25 @@ p#rotationNum{
 .data-show-container {
 	display: flex; /* Usamos Flexbox */
 	position: absolute; /* Posiciona el contenedor de datos */
-	//justify-content: space-between; /* Espaciado uniforme entre columnas */
 	align-items: center; /* Alinea verticalmente los elementos */
-	//width: 100%; /* Asegura que ocupe todo el ancho disponible */
-	//margin-top: 75%; /* Espaciado superior opcional */
-	//margin-left: -35%;
-	//grid-template-columns: repeat(3, 1fr); /* 3 columnas iguales */
-	gap: 5vmin;
+	gap: 3vmin;
 	pointer-events: none; 
   }
   
   .data-show {
-	//flex: 1; /* Cada columna ocupa el mismo espacio */
 	text-align: center; /* Centra el texto dentro de cada columna */
 	font-size: 2.8vmin; // Cambia el tamaño de la fuente
 	color: rgb(171, 255, 155);
 	font-style: bold; // Aplica el estilo en negrita
 	font-family: "Press Start 2P", system-ui;
-	//width: 9vmin;
 	pointer-events: none; 
+  }
+
+  .multi-button{
+	color:rgb(135, 109, 86);
+	pointer-events:none;
+	font-family: "Press Start 2P", system-ui;
+	margin-top: 12vmin;
+	text-align: bottom;
+	font-size:1.5vmin;
   }

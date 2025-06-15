@@ -28,9 +28,9 @@ const MainScreen = (props) => {
     return min2 + ((value - min1) * (max2 - min2)) / (max1 - min1);
   };
   // 0 a 120 son los valoreas que devuelven los diales, el resto son los rangos de valores que estoy dispuesto a poner
-  const frequencyMapped = mapRange(frequency/3, 0, 119, 0.2, 0.5); // Frecuencia entre 0.6 y 4.2
-  const wavelengthMapped = mapRange(wavelength/3, 0, 119, 10, 80); // Wavelength entre 10 y 80
-  const amplitudeMapped = mapRange(amplitude/3, 0, 119, 25, 80); // Amplitud entre 25 y 80
+  const frequencyMapped = mapRange(frequency/3, 0, 119, appSettings.minFrequency, appSettings.maxFrequency); // Frecuencia entre 0.6 y 4.2
+  const wavelengthMapped = mapRange(wavelength/3, 0, 119, appSettings.minWavelength, appSettings.maxWavelength); // Wavelength entre 10 y 80
+  const amplitudeMapped = mapRange(amplitude/3, 0, 119, appSettings.minAmplitude, appSettings.maxAmplitude); // Amplitud entre 25 y 80
   const [waveType, setWaveType] = useState("sine"); // Tipo de onda, por defecto es "sine"; "square", "triangle", "sawtooth"
 
   const [isReseting, setIsReseting] = useState(false); // Estado para saber si se está reiniciando el lock
@@ -222,7 +222,7 @@ const changeWaveType = () => {
 
   return (
     <div id="screen_main" className={"screen_content"} style={{ backgroundImage: backgroundImage }}>
-        <div className="lockContainer" style={{backgroundImage: 'url('+appSettings.backgroundLock+')', width: containerWidth, height: containerHeight}}>
+        <div className="lockContainer" style={{backgroundImage: 'url('+appSettings.backgroundOscilloscope+')', width: containerWidth, height: containerHeight}}>
             <div style={{  display: "flex",position:'absolute',alignItems: "center",marginTop: containerMarginTop, marginLeft: containerMarginLeft}}>
                 <Dial id={"dial-frequency"} boxWidth={boxWidth} boxHeight={boxHeight} checking={processingSolution} 
                   rotationAngle={frequency} setRotationAngle={setFrequency} isReseting={isReseting}
@@ -241,35 +241,35 @@ const changeWaveType = () => {
             <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div>
 
             <div className={"boxButton boxButton"} onClick={() => !processingSolution && checkSolution()} 
-              style={{ width: boxWidth * appSettings.buttonWidth , height: boxHeight *appSettings.buttonHeight, marginTop: boxHeight * appSettings.buttonMarginTop, marginLeft: boxWidth * appSettings.buttonMarginLeft,
-              backgroundImage: 'url("' + appSettings.backgroundKey + '")',
+              style={{ width: boxWidth * appSettings.buttonWidth , height: boxHeight *appSettings.buttonHeight, top: boxHeight * appSettings.buttonMarginTop, left: boxWidth * appSettings.buttonMarginLeft,
+              backgroundImage: 'url("' + appSettings.backgroundButton + '")',
             }}/>
 
             {appSettings.dialMode==="MULTI" && <div className={"boxButton boxButton"} onClick={() => !processingSolution && changeWaveType()} 
-              style={{ width: boxWidth * 0.1 , height: boxHeight *0.1, marginTop: boxHeight * 0.75, marginLeft: boxWidth * 0.16,
+              style={{ width: boxWidth * appSettings.multiButtonWidth , height: boxHeight *appSettings.multiButtonHeight, top: boxHeight * appSettings.multiButtonMarginTop, left: boxWidth * appSettings.multiButtonMarginLeft, 
               backgroundImage: 'url("' + appSettings.modeButton + '")', 
-            }}><p style={{ margin: 0, marginTop: "9vmin", textAlign: "center", fontSize:"1.5vmin", color:"white" , pointerEvents:'none'}}>MODE</p></div>}
+            }}><p className='multi-button' style={{ marginTop: "12vmin", textAlign: "bottom", fontSize:"1.5vmin", color:appSettings.multiTextColor}}>MODE</p></div>}
         </div>
-        {light==="nok" && <div className="screenContainer" style={{backgroundImage: 'url('+appSettings.backgroundNok+')',  marginTop: boxHeight*-0.256,
-            width: containerWidth*0.543, height: containerHeight*0.543, }}>
+        {light==="nok" && <div className="screenContainer" style={{backgroundImage: 'url('+appSettings.backgroundNok+')',  marginTop: boxHeight*appSettings.screenContainerMarginTop,
+            width: containerWidth*appSettings.screenContainerWidth, height: containerHeight*appSettings.screenContainerHeight, }}>
             <svg xmlns="http://www.w3.org/2000/svg" height={appSettings.svgSize} viewBox="0 -960 960 960" width={appSettings.svgSize}
                   fill="#FFFFFF" style={{zIndex: 10, filter: "drop-shadow(0 0 0.2rem #ff2d55) drop-shadow(0 0 0.4rem #ff2d55)"}}>
                   <path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
               </svg>
         </div>}
                 
-        {light==="ok" && <div className="screenContainer" style={{backgroundImage: 'url('+appSettings.backgroundOk+')',  marginTop: boxHeight*-0.256,
-            width: containerWidth*0.543, height: containerHeight*0.543, }}>
+        {light==="ok" && <div className="screenContainer" style={{backgroundImage: 'url('+appSettings.backgroundOk+')',  marginTop: boxHeight*appSettings.screenContainerMarginTop,
+            width: containerWidth*appSettings.screenContainerWidth, height: containerHeight*appSettings.screenContainerHeight, }}>
             <svg xmlns="http://www.w3.org/2000/svg" height={appSettings.svgSize} viewBox="0 -960 960 960" width={appSettings.svgSize}
                   fill="#FFFFFF" style={{zIndex: 10,filter: "drop-shadow(0 0 0.2rem rgb(69, 255, 45)) drop-shadow(0 0 0.4rem rgb(45, 255, 80))"}}>
                   <path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/>
               </svg>
         </div>}
 
-       {light==="off" && <div className="data-show-container" style={{marginTop: boxHeight * 0.22, alignItems:"center", justifyContent: "center", height: boxHeight, width: boxWidth, }}>
-              <p className='data-show'style={{transform: "rotate(6deg)"}}>{appSettings.dialsNames[0]}:{frequency/3}</p>
-              <p className='data-show' style={{marginTop: "6%"}}>{appSettings.dialsNames[1]}:{wavelength/3}</p>
-              <p className='data-show' style={{transform: "rotate(-6deg)"}}>{appSettings.dialsNames[2]}:{amplitude/3}</p>
+       {light==="off" && <div className="data-show-container" style={{marginTop: boxHeight * appSettings.dataContainerMarginTop, alignItems:"center", justifyContent: "center", height: boxHeight, width: boxWidth, gap: appSettings.textGap}}>
+              <p className='data-show'style={{fontSize: appSettings.dialTextSize, transform: "rotate(6deg)"}}>{appSettings.dialsNames[0]}:{appSettings.viewAngle==="FALSE" ? frequency/3 : frequencyMapped.toFixed(3)}</p>
+              <p className='data-show' style={{fontSize: appSettings.dialTextSize, marginTop: "6%"}}>{appSettings.dialsNames[1]}:{appSettings.viewAngle==="FALSE" ? wavelength/3 : wavelengthMapped.toFixed(3)}</p>
+              <p className='data-show' style={{fontSize: appSettings.dialTextSize, transform: "rotate(-6deg)"}}>{appSettings.dialsNames[2]}:{appSettings.viewAngle==="FALSE" ? amplitude/3 : amplitudeMapped.toFixed(3)}</p>
         </div>}
 
       <audio id="audio_beep" src={appSettings.soundBeep} autostart="false" preload="auto" />

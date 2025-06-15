@@ -4,72 +4,12 @@ export const DEFAULT_APP_SETTINGS = {
   message: undefined,
   keysType: "NUMBERS",
   background: "images/standard/background3.png",
-  backgroundLock : "images/standard/background_oscilloscope.png",
+  backgroundOscilloscope : "images/standard/background_oscilloscope.png",
   backgroundDial: "images/standard/dial.png",
   modeButton: "images/standard/mode_button.png",
   backgroundNok: "images/standard/background_nok.png",
   backgroundOk: "images/standard/background_ok.png",
-  //backgroundKeypad: "images/standard/lock.png",
-  //backgroundButton: "images/standard/button.png",
-  backgroundKey: "images/standard/button.png",
-  numbers: ["1","2","3","4","5","6","7","8","9","✱","0","#"],
-  letters: ["A","B","C","D","E","F","G","H","I","J","K","L"],
-  colors : [
-    "Red", //#FF0000
-    "Green", //#008000
-    "Blue", //#0000FF
-    "Yellow", //#FFFF00
-    "Orange", //#FFA500
-    "Pink", //#FF1493
-    "Cyan", //#00FFFF
-    "Purple", //#800080
-    "Brown", //#8B4513
-    "Black", //#000000
-    "Gray", //#808080
-    "White", //#FFFFFF
-  ],
-  coloredBackgroundKeys: [
-    "images/background_key_red.png",
-    "images/background_key_green.png",
-    "images/background_key_blue.png",
-    "images/background_key_yellow.png",
-    "images/background_key_orange.png",
-    "images/background_key_pink.png",
-    "images/background_key_cyan.png",
-    "images/background_key_purple.png",
-    "images/background_key_brown.png",
-    "images/background_key.png",
-    "images/background_key_gray.png",
-    "images/background_key_white.png",
-  ],
-  symbols: [
-    "Triangle",
-    "Square",
-    "Circle",
-    "Rhombus",
-    "Spades",
-    "Hearts",
-    "Clubs",
-    "Diamonds",
-    "Star",
-    "Moon",
-    "Sun",
-    "Puzzle",
-  ],
-  symbolsBackgroundKeys: [
-    "images/symbol_triangle.png",
-    "images/symbol_square.png",
-    "images/symbol_circle.png",
-    "images/symbol_rhombus.png",
-    "images/symbol_ace_spades.png",
-    "images/symbol_ace_hearts.png",
-    "images/symbol_ace_clubs.png",
-    "images/symbol_ace_diamonds.png",
-    "images/symbol_star.png",
-    "images/symbol_moon.png",
-    "images/symbol_sun.png",
-    "images/symbol_puzzle.png",
-  ],
+  backgroundButton: "images/standard/button.png",
   backgroundMessage: "images/background_message.png",
   imageLightOff: "images/standard/light_off.png",
   imageLightNok: "images/standard/light_nok.png",
@@ -81,10 +21,10 @@ export const DEFAULT_APP_SETTINGS = {
 
   dialWidth: 0.7, // Relative size of the dial compared to the box width
   dialHeight: 0.7, // Relative size of the dial compared to the box height
-  dialTextSize: "9vmin", // Font size for the dial text
+  dialTextSize: "2.5vmin", // Font size for the dial text
   dialTextColor: "#000000", // Color for the dial text
 
-  lightBack: "false", // Controls whether to show the image behind the dial frame
+  //lightBack: "false", // Controls whether to show the image behind the dial frame
 
   rayWidth: 0.59, // Relative width of the ray compared to the box width
   rayHeight: 0.6, // Relative height of the ray compared to the box height
@@ -98,7 +38,27 @@ export const DEFAULT_APP_SETTINGS = {
   dialsNames: ["F", "W", "A",], // Names for the dials
   dialMode: "MULTI", // Dial mode can be "NORMAL" or "MULTI"
 
+  minFrequency: 0.2, // Minimum frequency for the ray
+  maxFrequency: 0.5, // Maximum frequency for the ray
+  minAmplitude: 25, // Minimum amplitude for the ray
+  maxAmplitude: 80, // Maximum amplitude for the ray
+  minWavelength: 10, // Minimum wavelength for the ray
+  maxWavelength: 80, // Maximum wavelength for the ray
+
   svgSize: '25vmin',
+  viewAngle: "FALSE", //FALSE, TRUE
+  textGap: "3.5vmin",
+  screenContainerWidth: 0.543, // Width of the screen container
+  screenContainerHeight: 0.543, // Height of the screen container
+  screenContainerMarginTop: -0.256, // Margin from the top of the box to the screen container in percentage of box height
+
+  multiButtonWidth: 0.1, // Relative width of the multi button compared to the box width
+  multiButtonHeight: 0.1, // Relative height of the multi button compared to the box height
+  multiButtonMarginTop: 0.75, // Margin from the top of the box to the multi button in percentage of box height
+  multiButtonMarginLeft: 0.16, // Margin from the left of the box to the multi button in percentage of box width
+
+  dataContainerMarginTop: 0.22,
+  multiTextColor: "rgb(135, 109, 86)",
 };
 
 export const SKIN_SETTINGS_RETRO = {

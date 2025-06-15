@@ -96,15 +96,9 @@ const  Dial = ( props ) => {
         <div className='lockContainer' style={{  
             width: Math.min(props.boxWidth, props.boxHeight) * 0.24, 
             height: Math.min(props.boxWidth, props.boxHeight) * 0.24,
-            //right: props.boxWidth / 2 * 0.2,
-            //transform: "translate(-50%, -50%)",
-            //top: props.boxHeight * 0.33,
-            left: props.xPosition,//props.appwidth / 2 + props.boxWidth / 2 * 0.1,
-            //right: props.xPosition,
-            //top: "71%",
-            
+            left: props.xPosition,
             cursor: "pointer",
-            position: "absolute",}}
+            }}
             onDragStart={(event) => event.preventDefault()} 
             onMouseUp={handleMouseUp} 
             onMouseDown={handleMouseDown} 
@@ -115,6 +109,7 @@ const  Dial = ( props ) => {
               width: "100%", // Usa el menor valor para asegurar que sea cuadrado
               height: "100%", // Usa el menor valor para asegurar que sea cuadrado
               //marginLeft: props.boxWidth / 2 * 0.225,
+              
               backgroundImage: `url(${appSettings.backgroundDial})`, // Imagen del dial
               transform: `rotate(${props.rotationAngle}deg)`, // Rotación dinámica.
               transition: props.isReseting ? "transform 2.5s ease" : "none", // Transición suave solo durante el reset
