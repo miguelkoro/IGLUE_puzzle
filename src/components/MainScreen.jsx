@@ -137,8 +137,13 @@ const MainScreen = (props) => {
 
     setProcessingSolution(true);
     Utils.log("Check solution", [ frequency/3, wavelength/3, amplitude/3]);
-    let solution = [ frequency/3, wavelength/3, amplitude/3].join(';');
-    if (appSettings.dialMode === "MULTI") solution = [waveType, frequency/3, wavelength/3, amplitude/3].join(';');
+    let solution = "";
+    if(appSettings.viewAngle === "FALSE"){
+      solution = [waveType, frequency/3, wavelength/3, amplitude/3].join(';');
+      //if (appSettings.dialMode === "MULTI") solution = [waveType, frequency/3, wavelength/3, amplitude/3].join(';');
+    }else{
+      solution = [waveType, frequencyMapped.toFixed(3), wavelengthMapped.toFixed(3), amplitudeMapped.toFixed(3)].join(';');
+    }
     console.log("Check solution", solution);
     escapp.checkNextPuzzle(solution, {}, (success, erState) => {
           Utils.log("Check solution Escapp response", success, erState);
@@ -170,13 +175,24 @@ const MainScreen = (props) => {
         setLight("off");
         setProcessingSolution(false);
       }else{
-        //props.onKeypadSolved(solution); //Cambiar
+        
+        if(appSettings.actionAfterSolve === "PLAY_SOUND"){
+          //playFrequency(frequencyMapped); // Reproduce el sonido de la frecuencia
+          audio = document.getElementById("audio_post_success");
+          setTimeout(() => {
+            //props.onKeypadSolved(solution); //Cambiar
+            Utils.log("Puzzle solved, sending solution");
+          }, appSettings.timeSoundAfterSolve); 
+          audio.play();
+        }else{
+          props.onKeypadSolved(solution); //Cambiar
+          
+        }
       }
     }, afterChangeBoxLightDelay);
     
     //!success ? audio.play() : playFrequency(frequencyMapped); // Reproduce el sonido de la frecuencia
     audio.play();
-    
   }
 
   //Pone la imagen del fondo
@@ -281,6 +297,7 @@ const changeWaveType = () => {
       <audio id="audio_beep" src={appSettings.soundBeep} autostart="false" preload="auto" />
       <audio id="audio_failure" src={appSettings.soundNok} autostart="false" preload="auto" />
       <audio id="audio_success" src={appSettings.soundOk} autostart="false" preload="auto" />
+      <audio id="audio_post_success" src={appSettings.soundAfterSolve} autostart="false" preload="auto" />
 
  
     </div>);

@@ -74,7 +74,7 @@ const Ray = (props) => {
 
         drawWave(ctx, width, height); // Dibuja la onda
     
-        offset += 2; // Incrementa el desplazamiento para animar la onda
+        offset += 4; // Incrementa el desplazamiento para animar la onda
         animationRef.current = requestAnimationFrame(() =>
           draw(ctx, width, height)
         ); // Solicita el siguiente frame

@@ -19,6 +19,9 @@ export const DEFAULT_APP_SETTINGS = {
   soundOk: "sounds/solution_ok.mp3",
   soundDial: "sounds/spin.wav",
 
+  soundAfterSolve: "sounds/after_solve.mp3",
+  timeSoundAfterSolve: 4000, // Time in milliseconds to play the sound after solving
+
   dialWidth: 0.7, // Relative size of the dial compared to the box width
   dialHeight: 0.7, // Relative size of the dial compared to the box height
   dialTextSize: "2.5vmin", // Font size for the dial text
