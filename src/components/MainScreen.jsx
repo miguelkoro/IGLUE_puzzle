@@ -34,7 +34,7 @@ const MainScreen = (props) => {
   const [waveType, setWaveType] = useState("sine"); // Tipo de onda, por defecto es "sine"; "square", "triangle", "sawtooth"
 
   const [isReseting, setIsReseting] = useState(false); // Estado para saber si se está reiniciando el lock
-
+const [audioAmplitude, setAudioAmplitude] = useState(amplitude);
   //
 
   const styles ={
@@ -164,6 +164,7 @@ const MainScreen = (props) => {
     if (success) {
       audio = document.getElementById("audio_success");
       setLight("ok");
+      setAudioAmplitude(amplitudeMapped); // Actualiza la amplitud del audio para la visualización
     } else {
       audio = document.getElementById("audio_failure");
       setLight("nok");
@@ -179,11 +180,16 @@ const MainScreen = (props) => {
         if(appSettings.actionAfterSolve === "PLAY_SOUND"){
           //playFrequency(frequencyMapped); // Reproduce el sonido de la frecuencia
           audio = document.getElementById("audio_post_success");
+          //handlePlayAudioAndVisual();
+          
+          audio.play();
+          visualizeAudio(audio);
           setTimeout(() => {
             //props.onKeypadSolved(solution); //Cambiar
             Utils.log("Puzzle solved, sending solution");
+            
           }, appSettings.timeSoundAfterSolve); 
-          audio.play();
+          
         }else{
           props.onKeypadSolved(solution); //Cambiar
           
@@ -194,6 +200,41 @@ const MainScreen = (props) => {
     //!success ? audio.play() : playFrequency(frequencyMapped); // Reproduce el sonido de la frecuencia
     audio.play();
   }
+
+
+  const visualizeAudio = (audio) => {
+    //const audio = document.getElementById("audio_post_success");
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const source = audioContext.createMediaElementSource(audio);
+    const analyser = audioContext.createAnalyser();
+    analyser.fftSize = 256;
+    const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+
+    function update() {
+      analyser.getByteTimeDomainData(dataArray);
+      // Calcula la amplitud RMS (root mean square)
+      let sum = 0;
+      for (let i = 0; i < dataArray.length; i++) {
+        const value = (dataArray[i] - 128) / 128;
+        sum += value * value;
+      }
+      const rms = Math.sqrt(sum / dataArray.length);
+      // Ajusta el rango de amplitud visual según tu escala
+      setAudioAmplitude(amplitudeMapped + rms * appSettings.maxAmplitude); // Ejemplo: entre 25 y 80
+
+      if (!audio.paused && !audio.ended) {
+        requestAnimationFrame(update);
+      } else {
+        setAudioAmplitude(amplitudeMapped); // Restaura valor original al terminar
+        audioContext.close();
+      }
+    }
+
+    update();
+  };
 
   //Pone la imagen del fondo
   let backgroundImage = 'url("' + appSettings.background + '")';
@@ -253,7 +294,7 @@ const changeWaveType = () => {
                   xPosition={boxWidth*appSettings.dialsGap*3} name={appSettings.dialsNames[2]}/>              
             </div>    
             {light!=="nok" && <Ray boxHeight={boxHeight} boxWidth={boxWidth} checking={processingSolution} waveType={waveType}
-                  frequency={frequencyMapped} amplitude={amplitudeMapped} wavelength={wavelengthMapped}/>}
+                  frequency={frequencyMapped} amplitude={light === "ok" ? audioAmplitude : amplitudeMapped} wavelength={wavelengthMapped}/>}
             <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
             <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
             <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div>

@@ -1,116 +1,106 @@
-import React, { useContext,useRef, useEffect } from "react";
+import React, { useContext, useRef, useEffect } from "react";
 import { GlobalContext } from "./GlobalContext";
 const Ray = (props) => {
-    const {  appSettings } = useContext(GlobalContext);
+    const { appSettings } = useContext(GlobalContext);
     const canvasRef = useRef();
-    const animationRef = useRef(); // Referencia para controlar la animación
-    let offset = 0; // Desplazamiento horizontal de la onda
-    //const canvas = canvasRef.current;
+    const animationRef = useRef();
+    const offsetRef = useRef(0);
 
-    const drawLine = (ctx, width, height, lineWidth, color)=> {
+    // Ref para las props actuales
+    const propsRef = useRef(props);
+    propsRef.current = props;
+
+    const drawLine = (ctx, width, height, lineWidth, color) => {
         ctx.beginPath();
-        ctx.strokeStyle = color; // Color de la onda
+        ctx.strokeStyle = color;
         ctx.lineWidth = lineWidth;
-        const centerX = width / 2; // Centro del canvas
+        const centerX = width / 2;
 
-        //Tengo que convertirlas ya que los diales me dan el valor en un rango muy elevado
-        const maxAmplitude = props.amplitude * (height / 200); // Amplitud máxima
-        const maxWavelength = props.wavelength * (width / 500); // Longitud de onda máxima
-        const maxFrequency = props.frequency/1; // Frecuencia máxima
+        const maxAmplitude = propsRef.current.amplitude * (height / 200);
+        const maxWavelength = propsRef.current.wavelength * (width / 500);
+        const maxFrequency = propsRef.current.frequency / 1;
 
         for (let x = 0; x < width; x++) {
-            // Calcular el factor de escala basado en la distancia al centro
-            const distanceFromCenter = Math.abs(x - centerX) / centerX; // Normalizado entre 0 y 1
-            //const scale = 1 - distanceFromCenter; // Más cerca del centro = mayor escala
+            const distanceFromCenter = Math.abs(x - centerX) / centerX;
             const scale = Math.sin((1 - distanceFromCenter) * Math.PI / 2);
 
-            // Ajustar amplitud, longitud de onda y frecuencia según el factor de escala
             const scaledAmplitude = maxAmplitude * scale;
             const scaledWavelength = maxWavelength * scale;
             const scaledFrequency = maxFrequency * scale;
 
-            const phase = (2 * Math.PI * scaledFrequency * (x + offset)) / scaledWavelength;
+            const phase = (2 * Math.PI * scaledFrequency * (x + offsetRef.current)) / scaledWavelength;
 
             let waveValue = 0;
-            if (props.waveType === "square") {
+            if (propsRef.current.waveType === "square") {
                 waveValue = Math.sign(Math.sin(phase));
-            } else if (props.waveType === "triangle") {
-                // Onda triangular: valor entre -1 y 1
+            } else if (propsRef.current.waveType === "triangle") {
                 waveValue = 2 * Math.abs(2 * ((phase / (2 * Math.PI)) % 1) - 1) - 1;
-            } else if (props.waveType === "sawtooth") {
-                // Onda diente de sierra: valor entre -1 y 1
+            } else if (propsRef.current.waveType === "sawtooth") {
                 waveValue = 2 * ((phase / (2 * Math.PI)) % 1) - 1;
             } else {
-                // Por defecto, seno
                 waveValue = Math.sin(phase);
             }
 
             const y = height / 2 + scaledAmplitude * waveValue;
-            ctx.lineTo(x, y); // Dibuja la línea de la onda
+            ctx.lineTo(x, y);
         }
         ctx.stroke();
         ctx.closePath();
-    }
-
-    //Por si en el futuro quiero poner varias ondas separadas
-    const drawWave = (ctx, width, height)=> {
-        // Dibujar tres ondas separadas horizontalmente
-        //const waveCount = 3; // Número de ondas
-        //const waveSpacing = width / (waveCount + 1); // Espaciado horizontal entre ondas
-
-         // Crear un gradiente lineal
-         const gradient = ctx.createLinearGradient(0, 0, 0, height); // Gradiente horizontal
-         gradient.addColorStop(0, "rgb(209, 248, 209)"); // Verde opaco
-         gradient.addColorStop(0.5, "rgb(21, 255, 0)"); // Blanco semitransparente
-         gradient.addColorStop(1, "rgb(209, 248, 209)"); // Verde opaco
- 
-         drawLine(ctx, width, height, 6, gradient); // Dibuja la línea con el gradiente
-         drawLine(ctx, width, height, 3, "rgba(255, 255, 255, 0.52)"); // Dibuja la línea del medio
-    }
-   
-    const draw = (ctx, width, height) => {
-        if (!ctx) return; // Verifica si el contexto es válido
-        ctx.clearRect(0, 0, width, height); // Limpia el canvas
-
-        drawWave(ctx, width, height); // Dibuja la onda
-    
-        offset += 4; // Incrementa el desplazamiento para animar la onda
-        animationRef.current = requestAnimationFrame(() =>
-          draw(ctx, width, height)
-        ); // Solicita el siguiente frame
     };
-    
-    const resizeCanvas = () => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    const width = props.boxWidth * appSettings.rayWidth; // Escala proporcional al ancho del contenedor
-    const height = props.boxHeight * appSettings.rayHeight; // Escala proporcional al alto del contenedor
-    canvas.width = width;
-    canvas.height = height;
 
-    draw(ctx, width, height); // Redibuja la onda con las nuevas dimensiones
+    const drawWave = (ctx, width, height) => {
+        const gradient = ctx.createLinearGradient(0, 0, 0, height);
+        gradient.addColorStop(0, "rgb(209, 248, 209)");
+        gradient.addColorStop(0.5, "rgb(21, 255, 0)");
+        gradient.addColorStop(1, "rgb(209, 248, 209)");
+        drawLine(ctx, width, height, 6, gradient);
+        drawLine(ctx, width, height, 3, "rgba(255, 255, 255, 0.52)");
+    };
+
+    const draw = () => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        const width = propsRef.current.boxWidth * appSettings.rayWidth;
+        const height = propsRef.current.boxHeight * appSettings.rayHeight;
+        canvas.width = width;
+        canvas.height = height;
+        ctx.clearRect(0, 0, width, height);
+        drawWave(ctx, width, height);
+        offsetRef.current += 1;
+        animationRef.current = requestAnimationFrame(draw);
     };
 
     useEffect(() => {
-        resizeCanvas(); // Configura el canvas inicialmente
+        draw(); // Dibuja el primer frame inmediatamente
+        animationRef.current = requestAnimationFrame(draw);
         return () => {
-            cancelAnimationFrame(animationRef.current); // Detiene la animación al desmontar el componente
+            cancelAnimationFrame(animationRef.current);
         };
-    }, [props.boxWidth, props.boxHeight, props.frequency, props.amplitude, props.wavelength, props.waveType]); // Redibuja la onda cuando cambian los valores
-    
-    return(<canvas
-        ref={canvasRef}
-        width={props.boxWidth}
-        height={props.boxHeight}
-        style={{
-            position: "absolute",
-            top: "39%",
-            transform: "translate(-50%, -50%)",
-            left: "49.9%",
-            zIndex: 1,
-            pointerEvents: "none",
-        }}
-      ></canvas>
+    }, []);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (canvas) {
+            canvas.width = props.boxWidth * appSettings.rayWidth;
+            canvas.height = props.boxHeight * appSettings.rayHeight;
+        }
+    }, [props.boxWidth, props.boxHeight]);
+
+    return (
+        <canvas
+            ref={canvasRef}
+            width={props.boxWidth}
+            height={props.boxHeight}
+            style={{
+                position: "absolute",
+                top: "39%",
+                transform: "translate(-50%, -50%)",
+                left: "49.9%",
+                zIndex: 1,
+                pointerEvents: "none",
+            }}
+        ></canvas>
     );
-}
+};
 export default Ray;
