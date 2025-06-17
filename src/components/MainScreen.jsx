@@ -216,7 +216,7 @@ const MainScreen = (props) => {
         setLight("off");
         setProcessingSolution(false);
       }else{
-        //props.onKeypadSolved(solution); //Cambiar
+        props.onKeypadSolved(solution); //Cambiar
       }
     }, afterChangeBoxLightDelay);
 
