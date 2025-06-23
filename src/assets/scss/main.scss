@@ -65,12 +65,12 @@ div.boxButton div {
 
 
 
-div.retro div.boxButton div {
+/*div.retro div.boxButton div {
   padding-top: 0.5px;
   font-size: 3.5vmin;
   font-family: 'Retro';
   font-weight: bold;
-}
+}*/
 
 div.boxLight {
 	position: absolute;
@@ -84,9 +84,9 @@ div.boxLight {
 	pointer-events: none;
 }
 
-div.retro div.boxLight {
+/*div.retro div.boxLight {
 	transition: opacity 2.5s ease, visibility ease 2.5s;
-}
+}*/
 
 
 ///////
@@ -100,6 +100,7 @@ div.retro div.boxLight {
 	transform: (-50%, - 50px); // Centra el lock en la pantalla
 	align-items: center;
 	justify-content: center;
+	cursor: pointer;
 }
 
 .telephoneContainer{
@@ -123,6 +124,7 @@ div.retro div.boxLight {
 	display: flex;
 	pointer-events: none;
 	position: absolute;
+	cursor: pointer;
 }
 //
 
@@ -140,6 +142,7 @@ div.pivote{
 	//right: "41%" , top: "40%", 
 	position:absolute; 
 	font-family: "Roboto", sans-serif;
+	pointer-events: none;
 }
 
 .numberContainer{
@@ -148,4 +151,5 @@ div.pivote{
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	pointer-events: none;
 }

@@ -124,7 +124,9 @@ const  SafeBoxDial = ( props ) => {
       return(
           <div className='dialContainer' style={{// width: props.boxWidth , height: props.boxHeight ,  
               width: props.boxWidth, 
-              height: props.boxHeight, }}
+              height: props.boxHeight, 
+              left: props.marginLeft,
+              top: props.marginTop,}}
               onDragStart={(event) => event.preventDefault()
             } onMouseUp={handleMouseUp} 
             onMouseDown={handleMouseDown} 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { GlobalContext } from "./GlobalContext";
 import './../assets/scss/main.scss';
 import SafeBoxDial from './SafeBoxDial.jsx';
@@ -49,11 +49,11 @@ const MainScreen = (props) => {
     let _lockHeight = _lockWidth / aspectRatio;
 
     let _containerWidth = _lockWidth ;
-    let _containerHeight = _lockHeight ;
+    let _containerHeight = _lockHeight;
 
 
-    let _containerMarginLeft=0;
-    let _containerMarginTop=0;
+    let _containerMarginLeft=_lockWidth*0.313;
+    let _containerMarginTop=_lockHeight * 0.315;
 
     let _boxWidth = _lockWidth * 0.37;
     let _boxHeight = _lockHeight * 0.37;
@@ -67,12 +67,16 @@ const MainScreen = (props) => {
 
     switch(appSettings.skin){
       case "RETRO":
-        _containerMarginTop = 0;
-        _containerHeight = _lockHeight *0.55;
-        _lightWidth = _lockWidth * 0.18;
-        _lightHeight = _lockHeight *0.18;
-        _lightLeft = _lockWidth * 0;
-        _lightTop =  _lockHeight * -0.14;
+        _containerMarginTop = _lockHeight * 0.3;
+        _containerMarginLeft = _lockWidth * 0.265;
+        _containerWidth = _lockWidth * 0.8;
+        _containerHeight = _lockHeight *0.8;
+        _boxWidth = _lockWidth * 0.31;
+        _boxHeight = _lockHeight * 0.31;
+        _lightWidth = _lockWidth * 0.15;
+        _lightHeight = _lockHeight *0.15;
+        _lightLeft = _lockWidth * 0.343;
+        _lightTop =  _lockHeight * 0.735;
         break;
       case "FUTURISTIC":
         _containerMarginTop = 0;
@@ -139,34 +143,66 @@ const MainScreen = (props) => {
     }, 300);
   }*/
 
+  const callingEndedRef = useRef(false);
+  const puzzleCheckedRef = useRef(false);
+  const resultRef = useRef({success: false, password: ""});
+
   const checkSolution = () => {
     setProcessingSolution(true);
     reset(); // Reinicia el lock
+    callingEndedRef.current = false;
+    puzzleCheckedRef.current = false;
     Utils.log("Check solution", password);
+    const audio_calling = document.getElementById("audio_calling");
+    audio_calling.play();
+    audio_calling.onended = () => {
+      callingEndedRef.current = true;
+      maybeProceed();
+    };
     escapp.checkNextPuzzle(password, {}, (success, erState) => {
           Utils.log("Check solution Escapp response", success, erState);
-          try {
-            setTimeout(() => {
-              changeBoxLight(success, password);
-            }, 700);
-          } catch(e){
-            Utils.log("Error in checkNextPuzzle",e);
-          }
+          //audio_calling.onended = () => {
+            try {            
+              //setTimeout(() => {
+                puzzleCheckedRef.current = true;
+                resultRef.current = {success, password};
+                maybeProceed();
+                            //changeBoxLight(success, password);
+              //}, 700);            
+            } catch(e){
+              Utils.log("Error in checkNextPuzzle",e);
+            }
+          //}
         });
   }
 
+  function maybeProceed() {
+    if (callingEndedRef.current && puzzleCheckedRef.current) {
+      setTimeout(() => {
+        changeBoxLight(resultRef.current.success, resultRef.current.password);
+      }, 700);
+    }
+  }
+
   const changeBoxLight = (success, solution) => {
+    //let audio_calling = document.getElementById("audio_calling");
+    //audio_calling.play();
+    //if (!callingEndedRef.current || !puzzleCheckedRef.current) return;
     let audio;
-    let afterChangeBoxLightDelay = 2000;
+    let post_success_audio;
+    let afterChangeBoxLightDelay = 3000;
     if (success) {      
       setLight("ok");
       audio = document.getElementById("audio_success");
+      if(appSettings.actionAfterSolve === "PLAY_SOUND") 
+        post_success_audio = document.getElementById("audio_post_success");
     } else {
       audio = document.getElementById("audio_failure");
       setLight("nok");
+
       reset(); //
     }
-
+    audio.currentTime = 0;
     setTimeout(() => {
       if(!success){
         setLight("off");
@@ -175,11 +211,27 @@ const MainScreen = (props) => {
     }, afterChangeBoxLightDelay);
 
     if(success){
+      audio_calling.pause();
       audio.play();
-      setTimeout(() => {     
+
+      //setTimeout(() => {     
        // props.onKeypadSolved(solution); //Cambiar
-      }, appSettings.delaySoundOk);
+      audio.onended = () => {
+        if(appSettings.actionAfterSolve === "PLAY_SOUND"){
+          //let post_success_audio = document.getElementById("audio_post_success");
+          //post_success_audio.currentTime = 0;
+          post_success_audio.play();
+          post_success_audio.onended = () => {
+            props.onKeypadSolved(solution);
+          };
+        }else{
+          props.onKeypadSolved(solution);
+        }
+      }
+      //}, appSettings.delaySoundOk);
     }else
+      //audio_calling.pause();
+      //audio_calling.play();
       audio.play();
   }
 
@@ -206,24 +258,26 @@ const MainScreen = (props) => {
   return (
     <div id="screen_main" className={"screen_content"} style={{ backgroundImage: backgroundImage }}>
       <div id="telephoneContainer" className="telephoneContainer" 
-        style={{backgroundImage: 'url('+appSettings.backgroundTelephone+')', width: containerWidth, height: containerHeight, }}>
-          <div className='numbersContainer' style={{ width: props.boxWidth, height: props.boxHeight, }}>
-             <Number value={0}/>
-             <Number value={1}/>
-             <Number value={2}/>
-             <Number value={3}/>
-             <Number value={4}/>
-             <Number value={5}/>
-             <Number value={6}/>
-             <Number value={7}/>
-             <Number value={8}/>
-             <Number value={9}/>
-          </div>
-          <SafeBoxDial
-              boxWidth={boxWidth} boxHeight={boxHeight} checking={processingSolution} 
-              rotationAngle={rotationAngle} setRotationAngle={setRotationAngle}
-              setPassword={setPassword}/>
-              
+        style={{backgroundImage: 'url('+appSettings.backgroundTelephone+')', width: containerWidth, height: containerHeight,
+          
+        }}>
+            <div className='numbersContainer' style={{ width: boxWidth, height: boxHeight, }}>
+              <Number value={0}/>
+              <Number value={1}/>
+              <Number value={2}/>
+              <Number value={3}/>
+              <Number value={4}/>
+              <Number value={5}/>
+              <Number value={6}/>
+              <Number value={7}/>
+              <Number value={8}/>
+              <Number value={9}/>
+            </div>
+            <SafeBoxDial
+                boxWidth={boxWidth} boxHeight={boxHeight} checking={processingSolution} 
+                rotationAngle={rotationAngle} setRotationAngle={setRotationAngle}
+                setPassword={setPassword} marginLeft={containerMarginLeft} marginTop={containerMarginTop}/>
+          
          <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
         <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
         <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div>
@@ -232,7 +286,8 @@ const MainScreen = (props) => {
 
         <audio id="audio_success" src={appSettings.soundOk} preload="auto"></audio>
         <audio id="audio_failure" src={appSettings.soundNok} preload="auto"></audio>
- 
+        <audio id="audio_calling" src={appSettings.soundCalling} preload="auto"></audio>
+        {appSettings.actionAfterSolve === "PLAY_SOUND" && <audio id="audio_post_success" src={appSettings.soundPostSuccess} preload="auto"></audio>}
      
     </div>);
 };

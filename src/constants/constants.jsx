@@ -81,12 +81,13 @@ export const DEFAULT_APP_SETTINGS = {
   imageLightOk: "images/standard/light_ok.png",
   //soundBeep: "sounds/beep.mp3",
   soundNok: "sounds/solution_nok.wav",
-  soundOk: "https://www.ivoox.com/japon-en-la-iigm-4-una-medida-extraordinaria_mf_149895750_feed_1.mp3",
+  soundOk: "sounds/solution_ok.mp3",//https://www.ivoox.com/japon-en-la-iigm-4-una-medida-extraordinaria_mf_149895750_feed_1.mp3",
   //soundOk"sounds/solution_ok.mp3",
   soundDial: "sounds/spin.wav",
   soundRetract: "sounds/retract.wav",
-  delaySoundOk: 10000, // Time in milliseconds that the soundOk will be played after the solution is correct
-
+  soundCalling: "sounds/calling.wav",
+  //delaySoundOk: 10000, // Time in milliseconds that the soundOk will be played after the solution is correct
+  soundPostSuccess: "sounds/post_success.mp3", // Sound played after the solution is correct and the message is shown
 
   dialWidth: 0.7, // Relative size of the dial compared to the box width
   dialHeight: 0.7, // Relative size of the dial compared to the box height
@@ -106,11 +107,11 @@ export const DEFAULT_APP_SETTINGS = {
 
 export const SKIN_SETTINGS_RETRO = {
   background: "images/retro/background.png",
-  backgroundKeypad: "images/background_keypad_retro.png",
-  backgroundKey: "images/background_key_retro.png",
+  //backgroundKeypad: "images/background_telephone.png",
+  //backgroundKey: "images/background_dial.png",
   
-  backgroundLock : "images/retro/background_lock_retro.png",
-  backgroundDial: "images/retro/dial_retro.png",
+  backgroundTelephone : "images/retro/background_telephone.png",
+  backgroundDial: "images/retro/background_dial.png",
   coloredBackgroundKeys: [
     "images/background_key_retro_red.png",
     "images/background_key_retro_green.png",
@@ -126,16 +127,35 @@ export const SKIN_SETTINGS_RETRO = {
     "images/background_key_retro_white.png",
   ],
   backgroundMessage: "images/background_message_retro.png",
-  imageLightOff: "images/retro/light_off_retro.png",
-  imageLightNok: "images/retro/light_nok_retro.png",
-  imageLightOk: "images/retro/light_ok_retro.png",
-  soundBeep: "sounds/beep_retro.wav",
-  soundNok: "sounds/solution_nok_retro.wav",
-  soundOk: "sounds/solution_ok_retro.wav",
+  imageLightOff: "images/retro/light_off.png",
+  imageLightNok: "images/retro/light_nok.png",
+  imageLightOk: "images/retro/light_ok.png",
 
-  dialTextSize: "9vmin", // Font size for the dial text
+
+  fontSize : "5vmin", // Font size for the numbers, letters, colors, or symbols
   dialTextColor: "#FFFFFF", // Color for the dial text
-  lightBack: "false"
+  lightBack: "false",
+
+  angleMultiplier: 30, // Angle multiplier to divide the dial into 10 parts
+  initialAngle: 50, // Initial angle of the dial in degrees
+
+  dialWidth: 0.25, // Relative size of the dial compared to the box width
+  dialHeight: 0.25, // Relative size of the dial compared to the box height
+
+
+  numbersPosition:[
+    {top: "46.5%", right: "37.7%"},
+    {top: "42%", right: "42%"},
+    {top: "41%", right: "47%"},
+    {top: "43.2%", right: "52.5%"},
+    {top: "48.5%", right: "55.8%"},
+    {top: "55%", right: "56.6%"},
+    {top: "62%", right: "55%"},
+    {top: "66.5%", right: "51.6%"},
+    {top: "68.5%", right: "46.7%"},
+    {top: "67%", right: "41.8%"},
+  ],
+  
 
 };
 
