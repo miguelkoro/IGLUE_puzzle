@@ -24,6 +24,9 @@ const MainScreen = (props) => {
   const [telephoneScreenMarginLeft, setTelephoneScreenMarginLeft] = useState(0); //
   const [telephoneScreenMarginTop, setTelephoneScreenMarginTop] = useState(0); //
 
+  const [callingTextMarginLeft, setCallingTextMarginLeft] = useState(0); //
+  const [callingTextMarginTop, setCallingTextMarginTop] = useState(0); //
+
   const [boxWidth, setBoxWidth] = useState(0);
   const [boxHeight, setBoxHeight] = useState(0);
   const [lightWidth, setLightWidth] = useState(0); //
@@ -80,6 +83,9 @@ const MainScreen = (props) => {
     let _telephoneScreenMarginLeft = _boxWidth * 0.07;
     let _telephoneScreenMarginTop = _boxHeight * 0.3;
 
+    let _callingTextMarginLeft = 0;
+    let _callingTextMarginTop = 0;
+
 
 
     switch(appSettings.skin){
@@ -104,10 +110,14 @@ const MainScreen = (props) => {
         //_boxWidth = _lockWidth * 0.1;
         _containerWidth = _lockWidth * 0.25;
         _containerHeight = _lockHeight *0.61;
-        _lightWidth = _lockWidth*0.9;
-        _lightHeight = _lockHeight*0.6;
+        _lightWidth = _containerWidth;
+        _lightHeight = _containerHeight*0.93;
+        _lightLeft = _lockWidth * -0.014;
+        _lightTop =  _lockHeight * 0.01;
         _boxHeight = _lockHeight * 0.06;
         _boxWidth = _lockWidth * 0.06;
+        _callingTextMarginLeft = _containerWidth * -0.05;
+        _callingTextMarginTop = _containerHeight * 0.5;
 
         break;
       default:
@@ -129,6 +139,9 @@ const MainScreen = (props) => {
     setTelephoneScreenHeight(_telephoneScreenHeight);
     setTelephoneScreenMarginLeft(_telephoneScreenMarginLeft);
     setTelephoneScreenMarginTop(_telephoneScreenMarginTop);
+
+    setCallingTextMarginLeft(_callingTextMarginLeft);
+    setCallingTextMarginTop(_callingTextMarginTop);
 
 
     setBoxWidth(_boxWidth);
@@ -181,12 +194,15 @@ const MainScreen = (props) => {
 
   const checkSolution = () => {
     setProcessingSolution(true);
-    reset(); // Reinicia el lock
+    if(appSettings.skin!=="FUTURISTIC")reset(); // Reinicia el lock
+    else setLight("on");
     callingEndedRef.current = false;
     puzzleCheckedRef.current = false;
     Utils.log("Check solution", password);
+    
     const audio_calling = document.getElementById("audio_calling");
     audio_calling.play();
+    
     audio_calling.onended = () => {
       callingEndedRef.current = true;
       maybeProceed();
@@ -238,6 +254,7 @@ const MainScreen = (props) => {
     setTimeout(() => {
       if(!success){
         setLight("off");
+        if(appSettings.skin === "FUTURISTIC")setPassword("");
         setProcessingSolution(false);
       }
     }, afterChangeBoxLightDelay);
@@ -284,19 +301,33 @@ const MainScreen = (props) => {
     if (processingSolution) {
       return;
     }
+    buttonSound(value);
+    if(password.length>=appSettings.maxNumber) return;
+    //if(password.length>=appSettings.solutionLength) return;
     setPassword(password + value);
     
-    buttonSound(value);
+    
+  }
+
+  const removeNumber = () => {
+    if (processingSolution) return;
+    buttonSound(0);
+    if(password.length === 0) return;
+    setPassword(password.slice(0, -1));
+    //setProcessingSolution(false);
   }
 
   const makeCall = () => {
     //setProcessingSolution(true);
+    if (processingSolution) return;
+    
     const shortBeep = document.getElementById("audio_beep");
       shortBeep.pause();
       shortBeep.currentTime = 0;
       shortBeep.play();
     Utils.log("onClickButton", password);
-    setPassword("");
+    //setPassword("");
+    checkSolution();
   }
 
   const pRef = useRef();
@@ -306,48 +337,37 @@ const MainScreen = (props) => {
     const p = pRef.current;
     if (!container || !p) return;
 
-    // Obtén el tamaño máximo de fuente en vmin (por ejemplo, "6vmin" => 6)
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      const maxFontSize = parseFloat(appSettings.screenFontSize) || 6;
-      let fontSize = maxFontSize;
-      p.style.fontSize = fontSize + "vmin";
+    // Extrae el número de vmin (por ejemplo, "6vmin" => 6)
+    const maxFontSize = parseFloat(appSettings.screenFontSize) || 6;
+    let fontSize = maxFontSize;
+    p.style.fontSize = fontSize + "vmin";
 
-      // Reduce font size hasta que quepa
-      while (p.scrollWidth > container.clientWidth && fontSize > 2) {
-        fontSize -= 0.2;
-        p.style.fontSize = fontSize + "vmin";
-      }
-    });
-  });
+    // Reduce font size hasta que quepa
+    while (p.scrollWidth > container.clientWidth && fontSize > 2) {
+      fontSize -= 0.2;
+      p.style.fontSize = fontSize + "vmin";
+    }
   }, [password, appSettings.screenFontSize, telephoneScreenWidth]);
 
   const futuristicRender = () => {
     return (<>
       <div
         className='telephone_screen'
-        style={{position: "absolute",
+        style={{
           left: telephoneScreenMarginLeft,
           top: telephoneScreenMarginTop,
           width: telephoneScreenWidth,
           height: telephoneScreenHeight,
-          display: "flex",alignItems: "center",justifyContent: "center",overflow: "hidden"
+          
         }}>
         <p
           ref={pRef}
-          style={{
-           
+          style={{           
             color: appSettings.screenFontColor,
-            //fontSize: appSettings.screenFontSize,
-            fontSize: appSettings.screenFontSize,
             margin: 0,
             width: "100%",
             textAlign: "center",
             whiteSpace: "nowrap",
-            //overflow: "hidden",
-            //textOverflow: "ellipsis",
-            transition: "font-size 0.2s"
-            //fontSize: "clamp(10px, 8vw, 40px)"
           }}
           id="telephonePassword">
           {password}
@@ -372,12 +392,16 @@ const MainScreen = (props) => {
         <div id="row4" className="row" style={{position:"absolute", top: containerHeight*0.75,}}>
           <div style={{width: boxWidth, height: boxHeight}}/>
           <BoxButton position={appSettings.keys[0]} value={0} boxWidth={boxWidth} boxHeight={boxHeight} onClick={(value) => onClickButton(value)} />          
+          <div className='boxButton' onClick={removeNumber} style={{ cursor:"pointer",width: boxWidth, height: boxHeight, backgroundImage: 'url("' + appSettings.backgroundKey + '")'}}>
+            <svg style={{marginLeft:"19%", marginTop:"5%"}} xmlns="http://www.w3.org/2000/svg" height={appSettings.callButonSize} viewBox="0 -960 960 960" width={appSettings.callButtonSize} fill="white"><path d="m456-320 104-104 104 104 56-56-104-104 104-104-56-56-104 104-104-104-56 56 104 104-104 104 56 56Zm-96 160q-19 0-36-8.5T296-192L80-480l216-288q11-15 28-23.5t36-8.5h440q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H360ZM180-480l180 240h440v-480H360L180-480Zm400 0Z"/></svg>
+          </div>
         </div>
         <div id="row5" className="row" style={{position:"absolute", top: containerHeight*0.86,}}>
           <div style={{width: boxWidth, height: boxHeight}}/>
-          <div className='boxButton' onClick={makeCall} style={{width: boxWidth, height: boxHeight, backgroundImage: 'url("' + appSettings.backgroundKeyCall + '")'}}>
+          <div className='boxButton' onClick={makeCall} style={{cursor:"pointer",width: boxWidth, height: boxHeight, backgroundImage: 'url("' + appSettings.backgroundKeyCall + '")'}}>
             <svg style={{marginLeft:"19%", marginTop:"5%"}} xmlns="http://www.w3.org/2000/svg" height={appSettings.callButonSize} viewBox="0 -960 960 960" width={appSettings.callButtonSize} fill="white"><path d="M798-120q-125 0-247-54.5T329-329Q229-429 174.5-551T120-798q0-18 12-30t30-12h162q14 0 25 9.5t13 22.5l26 140q2 16-1 27t-11 19l-97 98q20 37 47.5 71.5T387-386q31 31 65 57.5t72 48.5l94-94q9-9 23.5-13.5T670-390l138 28q14 4 23 14.5t9 23.5v162q0 18-12 30t-30 12ZM241-600l66-66-17-94h-89q5 41 14 81t26 79Zm358 358q39 17 79.5 27t81.5 13v-88l-94-19-67 67ZM241-600Zm358 358Z"/></svg>
           </div>
+
         </div>
         <audio id="audio_beep" src={appSettings.soundBeep} preload="auto"></audio>
         <audio id="audio_beep0" src={appSettings.soundsBeeps[0]} preload="auto"></audio>
@@ -391,8 +415,40 @@ const MainScreen = (props) => {
         <audio id="audio_beep8" src={appSettings.soundsBeeps[8]} preload="auto"></audio>
         <audio id="audio_beep9" src={appSettings.soundsBeeps[9]} preload="auto"></audio>
       </div>
+      <div className="boxLight boxLight_on" style={{ visibility: (light === "on" ||  light === "nok" || light === "ok") ? "visible" : "hidden", opacity: (light === "on" || light==="nok" || light==="ok") ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightWaiting + '")', left: lightLeft, top: lightTop , transition: "opacity 1s, transform 0.5s",}} ></div> 
+
+      
+      <div style={{ visibility: (light === "on") ? "visible" : "hidden", opacity: (light === "on")  ? "1" : "0",  transition: "opacity 1s, transform 1s", zIndex:"4", left: callingTextMarginLeft, top: callingTextMarginTop, position:"absolute", display: "flex", justifyContent:"center", display:"flex", width:"100%"}} >
+        <p style={{color:appSettings.callingFontColor, fontSize:appSettings.callingFontSize}}>{I18n.getTrans("i.calling")}<span className="dot-ellipsis"></span></p>
+      </div>
+      <div style={{ visibility: (light === "nok") ? "visible" : "hidden", opacity: (light === "nok")  ? "1" : "0",  transition: "opacity 1s, transform 1s", zIndex:"4", left: callingTextMarginLeft, top: callingTextMarginTop, position:"absolute", justifyContent:"center", display:"flex", width:"100%"}} >
+        <p style={{color:appSettings.callingFontColor, fontSize:appSettings.callingFontSize}}>{I18n.getTrans("i.noResponse")}</p>
+      </div>
+      <div style={{ visibility: (light === "ok") ? "visible" : "hidden", opacity: (light === "ok")  ? "1" : "0", transition: "opacity 1s, transform 1s", zIndex:"4", left: callingTextMarginLeft, top: callingTextMarginTop, position:"absolute", justifyContent:"center", display:"flex", width:"100%"}} >
+        <p style={{color:appSettings.callingFontColor, fontSize:appSettings.callingFontSize}}>{formatTime(timer)}</p>
+      </div>
+      {/*<div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
+      <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightWaiting + '")', left: lightLeft, top: lightTop }} ></div>*/}
     </>);
   }
+
+  function formatTime(seconds) {
+    const mm = String(Math.floor(seconds / 60)).padStart(2, '0');
+    const ss = String(seconds % 60).padStart(2, '0');
+    return `${mm}:${ss}`;
+  }
+  const [timer, setTimer] = useState(0);
+
+  useEffect(() => {
+    let interval;
+    if (light === "ok") {
+      setTimer(0); // Reinicia el timer cada vez que entra en "ok"
+      interval = setInterval(() => {
+        setTimer((prev) => prev + 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [light]);
 
 
   const  reset = () =>{

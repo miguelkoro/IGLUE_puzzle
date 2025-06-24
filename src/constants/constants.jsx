@@ -112,20 +112,7 @@ export const SKIN_SETTINGS_RETRO = {
   
   backgroundTelephone : "images/retro/background_telephone.png",
   backgroundDial: "images/retro/background_dial.png",
-  coloredBackgroundKeys: [
-    "images/background_key_retro_red.png",
-    "images/background_key_retro_green.png",
-    "images/background_key_retro_blue.png",
-    "images/background_key_retro_yellow.png",
-    "images/background_key_retro_orange.png",
-    "images/background_key_retro_pink.png",
-    "images/background_key_retro_cyan.png",
-    "images/background_key_retro_purple.png",
-    "images/background_key_retro_brown.png",
-    "images/background_key_retro_black.png",
-    "images/background_key_retro_gray.png",
-    "images/background_key_retro_white.png",
-  ],
+
   backgroundMessage: "images/background_message_retro.png",
   imageLightOff: "images/retro/light_off.png",
   imageLightNok: "images/retro/light_nok.png",
@@ -182,10 +169,11 @@ export const SKIN_SETTINGS_FUTURISTIC = {
     "images/background_key_futuristic_white.png",
   ],
   backgroundMessage: "images/background_message_futuristic.png",
-  imageLightOff: "images/futuristic/light_off_futuristic.png",
+  //imageLightOff: "images/futuristic/light_off_futuristic.png",
   imageLightNok: "images/futuristic/light_nok_futuristic.png",
   imageLightOk: "images/futuristic/light_ok_futuristic.png",
-  soundNok: "sounds/solution_nok_futuristic.wav",
+  imageLightWaiting: "images/futuristic/light_waiting.png",
+  //soundNok: "sounds/solution_nok_futuristic.wav",
 
   dialTextSize: "9vmin", // Font size for the dial text
   dialTextColor: "#0fbdfd", // Color for the dial text
@@ -210,6 +198,10 @@ export const SKIN_SETTINGS_FUTURISTIC = {
   screenFontColor: "#0fbdfd", // Color for the screen text
 
   callButtonSize: "4.5vmin", // Size of the call button
+  maxNumber: 15, // Maximum number of digits in the call input
+
+  callingFontSize: "4vmin", // Font size for the calling text
+  callingFontColor: "white", // Color for the calling text
 };
 
 export const ESCAPP_CLIENT_SETTINGS = {
