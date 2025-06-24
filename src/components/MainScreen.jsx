@@ -15,6 +15,15 @@ const MainScreen = (props) => {
   const [containerHeight, setContainerHeight] = useState(0);//
   const [containerMarginTop, setContainerMarginTop] = useState(0);//
   const [containerMarginLeft, setContainerMarginLeft] = useState(0);//
+
+  const [telephoneMarginLeft, setTelephoneMarginLeft] = useState(0);//
+  const [telephoneMarginTop, setTelephoneMarginTop] = useState(0);//
+
+  const [telephoneScreenWidth, setTelephoneScreenWidth] = useState(0); //
+  const [telephoneScreenHeight, setTelephoneScreenHeight] = useState(0); //
+  const [telephoneScreenMarginLeft, setTelephoneScreenMarginLeft] = useState(0); //
+  const [telephoneScreenMarginTop, setTelephoneScreenMarginTop] = useState(0); //
+
   const [boxWidth, setBoxWidth] = useState(0);
   const [boxHeight, setBoxHeight] = useState(0);
   const [lightWidth, setLightWidth] = useState(0); //
@@ -63,6 +72,14 @@ const MainScreen = (props) => {
     let _lightLeft;
     let _lightTop;
 
+    let _telephoneMarginLeft = 0;
+    let _telephoneMarginTop = 0;
+
+    let _telephoneScreenWidth = _boxWidth *0.46;
+    let _telephoneScreenHeight = _boxHeight*0.25 ;
+    let _telephoneScreenMarginLeft = _boxWidth * 0.07;
+    let _telephoneScreenMarginTop = _boxHeight * 0.3;
+
 
 
     switch(appSettings.skin){
@@ -79,12 +96,18 @@ const MainScreen = (props) => {
         _lightTop =  _lockHeight * 0.735;
         break;
       case "FUTURISTIC":
-        _containerMarginTop = 0;
-        _containerHeight = _lockHeight *0.605;
+        _containerMarginTop = _lockHeight * -0.04;
+        _containerMarginLeft = _lockWidth * 0.025;
+        _telephoneMarginLeft = _lockWidth * 0.02;
+        _telephoneMarginTop = _lockHeight * 0.001;
+        //_boxHeight = _lockHeight * 0.;
+        //_boxWidth = _lockWidth * 0.1;
+        _containerWidth = _lockWidth * 0.25;
+        _containerHeight = _lockHeight *0.61;
         _lightWidth = _lockWidth*0.9;
         _lightHeight = _lockHeight*0.6;
-        _boxHeight = _lockHeight * 0.9;
-        _boxWidth = _lockWidth * 0.9;
+        _boxHeight = _lockHeight * 0.06;
+        _boxWidth = _lockWidth * 0.06;
 
         break;
       default:
@@ -98,6 +121,15 @@ const MainScreen = (props) => {
     setContainerHeight(_containerHeight);
     setContainerMarginTop(_containerMarginTop);
     setContainerMarginLeft(_containerMarginLeft);
+
+    setTelephoneMarginLeft(_telephoneMarginLeft);
+    setTelephoneMarginTop(_telephoneMarginTop);
+
+    setTelephoneScreenWidth(_telephoneScreenWidth);
+    setTelephoneScreenHeight(_telephoneScreenHeight);
+    setTelephoneScreenMarginLeft(_telephoneScreenMarginLeft);
+    setTelephoneScreenMarginTop(_telephoneScreenMarginTop);
+
 
     setBoxWidth(_boxWidth);
     setBoxHeight(_boxHeight);
@@ -241,6 +273,127 @@ const MainScreen = (props) => {
     backgroundImage += ', url("' + appSettings.background + '")';
   }
 
+  const buttonSound = (value) => {
+    const shortBeep = document.getElementById("audio_beep"+value);
+    shortBeep.pause();
+      shortBeep.currentTime = 0;
+      shortBeep.play();
+  }
+
+  const onClickButton = (value) => {
+    if (processingSolution) {
+      return;
+    }
+    setPassword(password + value);
+    
+    buttonSound(value);
+  }
+
+  const makeCall = () => {
+    //setProcessingSolution(true);
+    const shortBeep = document.getElementById("audio_beep");
+      shortBeep.pause();
+      shortBeep.currentTime = 0;
+      shortBeep.play();
+    Utils.log("onClickButton", password);
+    setPassword("");
+  }
+
+  const pRef = useRef();
+  useEffect(() => {
+    if(appSettings.skin !== "FUTURISTIC") return;
+    const container = document.querySelector('.telephone_screen');
+    const p = pRef.current;
+    if (!container || !p) return;
+
+    // Obtén el tamaño máximo de fuente en vmin (por ejemplo, "6vmin" => 6)
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      const maxFontSize = parseFloat(appSettings.screenFontSize) || 6;
+      let fontSize = maxFontSize;
+      p.style.fontSize = fontSize + "vmin";
+
+      // Reduce font size hasta que quepa
+      while (p.scrollWidth > container.clientWidth && fontSize > 2) {
+        fontSize -= 0.2;
+        p.style.fontSize = fontSize + "vmin";
+      }
+    });
+  });
+  }, [password, appSettings.screenFontSize, telephoneScreenWidth]);
+
+  const futuristicRender = () => {
+    return (<>
+      <div
+        className='telephone_screen'
+        style={{position: "absolute",
+          left: telephoneScreenMarginLeft,
+          top: telephoneScreenMarginTop,
+          width: telephoneScreenWidth,
+          height: telephoneScreenHeight,
+          display: "flex",alignItems: "center",justifyContent: "center",overflow: "hidden"
+        }}>
+        <p
+          ref={pRef}
+          style={{
+           
+            color: appSettings.screenFontColor,
+            //fontSize: appSettings.screenFontSize,
+            fontSize: appSettings.screenFontSize,
+            margin: 0,
+            width: "100%",
+            textAlign: "center",
+            whiteSpace: "nowrap",
+            //overflow: "hidden",
+            //textOverflow: "ellipsis",
+            transition: "font-size 0.2s"
+            //fontSize: "clamp(10px, 8vw, 40px)"
+          }}
+          id="telephonePassword">
+          {password}
+        </p>
+      </div>
+      <div className='keypad' id='keypad' style={{ width: containerWidth, height: containerHeight, left: containerMarginLeft, top: containerMarginTop}}>
+        <div id="row1" className="row" style={{position:"absolute", }}>
+          <BoxButton position={appSettings.keys[1]} value={1} boxWidth={boxWidth} boxHeight={boxHeight} onClick={(value) => onClickButton(value)} />
+          <BoxButton position={appSettings.keys[2]} value={2} boxWidth={boxWidth} boxHeight={boxHeight} onClick={(value) => onClickButton(value)} />
+          <BoxButton position={appSettings.keys[3]} value={3} boxWidth={boxWidth} boxHeight={boxHeight} onClick={(value) => onClickButton(value)} />
+        </div>
+        <div id="row2" className="row" style={{position:"absolute", top: containerHeight*0.55}}>
+          <BoxButton position={appSettings.keys[4]} value={4} boxWidth={boxWidth} boxHeight={boxHeight} onClick={(value) => onClickButton(value)} />
+          <BoxButton position={appSettings.keys[5]} value={5} boxWidth={boxWidth} boxHeight={boxHeight} onClick={(value) => onClickButton(value)} />
+          <BoxButton position={appSettings.keys[6]} value={6} boxWidth={boxWidth} boxHeight={boxHeight} onClick={(value) => onClickButton(value)} />
+        </div>
+        <div id="row3" className="row" style={{position:"absolute", top: containerHeight*0.65}}>
+          <BoxButton position={appSettings.keys[7]} value={7} boxWidth={boxWidth} boxHeight={boxHeight} onClick={(value) => onClickButton(value)} />
+          <BoxButton position={appSettings.keys[8]} value={8} boxWidth={boxWidth} boxHeight={boxHeight} onClick={(value) => onClickButton(value)} />
+          <BoxButton position={appSettings.keys[9]} value={9} boxWidth={boxWidth} boxHeight={boxHeight} onClick={(value) => onClickButton(value)} />
+        </div>
+        <div id="row4" className="row" style={{position:"absolute", top: containerHeight*0.75,}}>
+          <div style={{width: boxWidth, height: boxHeight}}/>
+          <BoxButton position={appSettings.keys[0]} value={0} boxWidth={boxWidth} boxHeight={boxHeight} onClick={(value) => onClickButton(value)} />          
+        </div>
+        <div id="row5" className="row" style={{position:"absolute", top: containerHeight*0.86,}}>
+          <div style={{width: boxWidth, height: boxHeight}}/>
+          <div className='boxButton' onClick={makeCall} style={{width: boxWidth, height: boxHeight, backgroundImage: 'url("' + appSettings.backgroundKeyCall + '")'}}>
+            <svg style={{marginLeft:"19%", marginTop:"5%"}} xmlns="http://www.w3.org/2000/svg" height={appSettings.callButonSize} viewBox="0 -960 960 960" width={appSettings.callButtonSize} fill="white"><path d="M798-120q-125 0-247-54.5T329-329Q229-429 174.5-551T120-798q0-18 12-30t30-12h162q14 0 25 9.5t13 22.5l26 140q2 16-1 27t-11 19l-97 98q20 37 47.5 71.5T387-386q31 31 65 57.5t72 48.5l94-94q9-9 23.5-13.5T670-390l138 28q14 4 23 14.5t9 23.5v162q0 18-12 30t-30 12ZM241-600l66-66-17-94h-89q5 41 14 81t26 79Zm358 358q39 17 79.5 27t81.5 13v-88l-94-19-67 67ZM241-600Zm358 358Z"/></svg>
+          </div>
+        </div>
+        <audio id="audio_beep" src={appSettings.soundBeep} preload="auto"></audio>
+        <audio id="audio_beep0" src={appSettings.soundsBeeps[0]} preload="auto"></audio>
+        <audio id="audio_beep1" src={appSettings.soundsBeeps[1]} preload="auto"></audio>
+        <audio id="audio_beep2" src={appSettings.soundsBeeps[2]} preload="auto"></audio>
+        <audio id="audio_beep3" src={appSettings.soundsBeeps[3]} preload="auto"></audio>
+        <audio id="audio_beep4" src={appSettings.soundsBeeps[4]} preload="auto"></audio>
+        <audio id="audio_beep5" src={appSettings.soundsBeeps[5]} preload="auto"></audio>
+        <audio id="audio_beep6" src={appSettings.soundsBeeps[6]} preload="auto"></audio>
+        <audio id="audio_beep7" src={appSettings.soundsBeeps[7]} preload="auto"></audio>
+        <audio id="audio_beep8" src={appSettings.soundsBeeps[8]} preload="auto"></audio>
+        <audio id="audio_beep9" src={appSettings.soundsBeeps[9]} preload="auto"></audio>
+      </div>
+    </>);
+  }
+
 
   const  reset = () =>{
     setPassword("");
@@ -251,6 +404,7 @@ const MainScreen = (props) => {
 
   useEffect(() => { // Comprueba si se ha alcanzado el número máximo de intentos (En local y en API)           
     //console.log("Tries: ", tries, "Solution: ", solutionArray);
+    if(appSettings.skin === "FUTURISTIC") return;
       password.length >= appSettings.solutionLength && checkSolution();
       Utils.log("Solution: ", password);
   }, [password]);
@@ -258,9 +412,8 @@ const MainScreen = (props) => {
   return (
     <div id="screen_main" className={"screen_content"} style={{ backgroundImage: backgroundImage }}>
       <div id="telephoneContainer" className="telephoneContainer" 
-        style={{backgroundImage: 'url('+appSettings.backgroundTelephone+')', width: containerWidth, height: containerHeight,
-          
-        }}>
+        style={{backgroundImage: 'url('+appSettings.backgroundTelephone+')', width: containerWidth, height: containerHeight, top: telephoneMarginTop, left: telephoneMarginLeft, position:"relative" }}>
+          {appSettings.skin==="FUTURISTIC" ? futuristicRender() : <>
             <div className='numbersContainer' style={{ width: boxWidth, height: boxHeight, }}>
               <Number value={0}/>
               <Number value={1}/>
@@ -281,6 +434,7 @@ const MainScreen = (props) => {
          <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
         <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
         <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div>
+          </>}
       </div>
         
 

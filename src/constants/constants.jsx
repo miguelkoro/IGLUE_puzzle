@@ -160,12 +160,13 @@ export const SKIN_SETTINGS_RETRO = {
 };
 
 export const SKIN_SETTINGS_FUTURISTIC = {
-  background: "images/futuristic/background_futuristic.png",
-  backgroundKeypad: "images/background_keypad_futuristic.png",
-  backgroundKey: "images/background_key_futuristic.png",
-  
-  backgroundLock : "images/futuristic/background_lock_futuristic.png",
-  backgroundDial: "images/futuristic/dial_futuristic.png",
+  background: "images/futuristic/background.png",
+  backgroundTelephone : "images/futuristic/background_telephone.png",
+  //backgroundKeypad: "images/background_keypad_futuristic.png",
+  backgroundKey: "images/futuristic/button.png",
+  backgroundKeyCall: "images/futuristic/button_call.png",
+  //backgroundLock : "images/futuristic/background_lock_futuristic.png",
+  //backgroundDial: "images/futuristic/dial_futuristic.png",
   coloredBackgroundKeys: [
     "images/background_key_futuristic_red.png",
     "images/background_key_futuristic_green.png",
@@ -189,6 +190,26 @@ export const SKIN_SETTINGS_FUTURISTIC = {
   dialTextSize: "9vmin", // Font size for the dial text
   dialTextColor: "#0fbdfd", // Color for the dial text
   lightBack:"true", //Para controlar si se muestra la imagen tras el marco del dial
+
+  fontSize : "5vmin", // Font size for the numbers, letters, colors, or symbols
+  fontColor: "#FFFFFF",
+  soundBeep: "sounds/beep.wav",
+  soundsBeeps: [
+    "sounds/beeps/beep1.wav",
+    "sounds/beeps/beep2.wav",
+    "sounds/beeps/beep3.wav",
+    "sounds/beeps/beep4.wav",
+    "sounds/beeps/beep5.wav",
+    "sounds/beeps/beep6.wav",
+    "sounds/beeps/beep7.wav",
+    "sounds/beeps/beep8.wav",
+    "sounds/beeps/beep9.wav",
+    "sounds/beeps/beep10.wav",
+  ],    
+  screenFontSize: 5, // Font size for the screen text
+  screenFontColor: "#0fbdfd", // Color for the screen text
+
+  callButtonSize: "4.5vmin", // Size of the call button
 };
 
 export const ESCAPP_CLIENT_SETTINGS = {

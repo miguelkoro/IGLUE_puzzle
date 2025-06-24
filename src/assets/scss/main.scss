@@ -15,13 +15,17 @@ div#keypad {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
+	position: absolute;
+	row-gap: 155vmin;
+
 }
 
 div#keypad div.row {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+	//justify-content: space-between;
 	align-items: center;
+	
 }
 
 div.boxButton {
@@ -29,7 +33,7 @@ div.boxButton {
 	background-repeat: no-repeat;
 	background-size: contain;
 	display: flex;
-	color: white;
+	color: white;;
 }
 
 div.boxButton:active {
