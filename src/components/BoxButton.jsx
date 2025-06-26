@@ -20,9 +20,9 @@ const BoxButton = (props) => {
       className={"boxButton boxButton" + props.position}
       onClick={() => props.onClick(props.value)}
       style={{
-        width: props.boxWidth,
-        height: props.boxHeight,
-        backgroundImage: 'url("' + appSettings.backgroundKeys[props.position-1] + '")',
+        width: props.boxWidth * 0.1,
+        height: props.boxHeight * 0.1,
+        backgroundImage: 'url("' + appSettings.backgroundButton + '")',
       }}
     >
       <div>{renderContent()}</div>

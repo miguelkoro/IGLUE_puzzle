@@ -1,8 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { GlobalContext } from "./GlobalContext";
 import './../assets/scss/main.scss';
 import SafeBoxDial from './SafeBoxDial.jsx';
 import BoxButton from './BoxButton.jsx';
+import Remote from './Remote.jsx';
+import "video.js/dist/video-js.css";
+import "videojs-youtube";
+import { VideoJS } from './VideoJS.jsx'; // Importa el componente VideoJS
 
 const MainScreen = (props) => {
   const { escapp, appSettings, Utils, I18n } = useContext(GlobalContext);
@@ -26,6 +30,27 @@ const MainScreen = (props) => {
   const [rotationAngle, setRotationAngle] = useState(0); // Estado para la rotación
   const [isReseting, setIsReseting] = useState(false); // Estado para saber si se está reiniciando el lock
 
+  const playerRef = useRef(null); // Referencia al reproductor de Video.js 
+  const [volume, setVolume] = useState(0.5); // Estado para el volumen (1 = 100%)
+  const [showVolume, setShowVolume] = useState(false); // Estado para mostrar/ocultar el volumen
+  const volumeTimeoutRef = useRef(null); // Referencia para almacenar el temporizador del volumen
+
+  const mp4VideoOptions = { 
+    autoplay: true,
+    controls: false,
+    responsive: true,
+    fluid: true,
+    //muted: false,
+    loop: true,
+    muted: true,
+    techOrder: ["html5", "youtube"],
+    sources: [
+      { src: "video/WhiteNoise.mp4", // Reemplaza con la ruta de tu archivo MP4
+        type: "video/mp4"},   //https://pixabay.com/videos/digital-t-v-noise-old-analog-27519/
+    ],
+    userActions: { click: false }
+  };
+  const [playerOptions, setPlayerOptions] = useState(mp4VideoOptions); // Estado para las opciones del reproductor
   //
 
   const styles ={
@@ -243,20 +268,78 @@ const MainScreen = (props) => {
     //setChecking(false);
   }
 
-  useEffect(() => { // Comprueba si se ha alcanzado el número máximo de intentos (En local y en API)           
+  const increaseVolume = () => {
+    if (playerRef.current) {
+      //const currentVolume = playerRef.current.volume();
+      volumeAppear(); // Muestra el volumen
+      if (playerRef.current.muted){
+        playerRef.current.muted(false); // Asegúrate de que no esté silenciado
+        const newVolume = Math.min(volume + 0.1, 1); // Asegura que no exceda 1
+        setVolume(parseFloat(newVolume.toFixed(1))); // Redondea a 1 decimal
+      }else if (volume < 1) {
+        const newVolume = Math.min(volume + 0.1, 1); // Asegura que no exceda 1
+        setVolume(parseFloat(newVolume.toFixed(1))); // Redondea a 1 decimal
+      }
+    }
+  };
+
+  // Función para bajar el volumen
+  const decreaseVolume = () => {
+    if (playerRef.current) {
+      //const currentVolume = playerRef.current.volume();
+      volumeAppear(); // Muestra el volumen
+      if (volume > 0) {
+        volume <= 0.1 && playerRef.current.muted(true); // Silencia el video si el volumen es 0.1
+        const newVolume = Math.min(volume - 0.1, 1); // Asegura que no exceda 1
+        setVolume(parseFloat(newVolume.toFixed(1))); // Redondea a 1 decimal
+      }
+    }
+  };
+
+  /*useEffect(() => { // Comprueba si se ha alcanzado el número máximo de intentos (En local y en API)           
     //console.log("Tries: ", tries, "Solution: ", solutionArray);
       solutionArray.length >= appSettings.solutionLength && checkSolution();
       console.log("Solution: ", solutionArray);
-  }, [solutionArray]);
+  }, [solutionArray]);*/
+
+  /*useEffect(() => {
+    if (playerRef.current) {
+      playerRef.current.volume(volume); // Establece el volumen del reproductor
+    }
+  }, [volume]); // Se ejecuta cada vez que cambia el volumen
+
+  useEffect(() => {
+    return () => {
+      if (volumeTimeoutRef.current) {
+        clearTimeout(volumeTimeoutRef.current);
+      }
+    };
+  }, []);*/
 
   return (
     <div id="screen_main" className={"screen_content"} style={{ backgroundImage: backgroundImage }}>
       <div id="lockContainer" className="lockContainer" 
-        style={{backgroundImage: 'url('+appSettings.backgroundLock+')', width: containerWidth, 
+        style={{backgroundImage: 'url('+appSettings.backgroundTV+')', width: containerWidth, 
           height: containerHeight, marginTop: containerMarginTop, marginLeft: containerMarginLeft ,
-          display: "flex", alignItems: "center", 
+          display: "flex", alignItems: "center", zIndex:2,
           justifyContent: "center", flexDirection: "column"
         }}>
+      <div className='video_container' style={{position: "absolute", width: boxWidth*0.9, left: "13.5%", top: "10%", zIndex: 1}}>
+        <VideoJS  options={playerOptions} onReady={(player) => {playerRef.current = player;}}/>  
+      </div>
+      <div id="lockContainer" className="lockContainer" 
+        style={{backgroundImage: 'url('+appSettings.backgroundTV+')', width: containerWidth, 
+          height: containerHeight, marginTop: containerMarginTop, marginLeft: containerMarginLeft ,
+          zIndex:2}}></div>
+
+      {showVolume && (
+            <div className='volume_div' style={{left:"19%", top:"47%"}}>
+              <p className='volume'>vol</p>
+              <div className='volumeBar'>
+                <div className='volumeBarFilled' style={{width: `${volume * 100}%`}}></div>
+              </div>
+            </div>
+            )}
       {/*<div id="keypad" style={{ width: containerWidth, height: containerHeight, marginTop: containerMarginTop, marginLeft: containerMarginLeft }}>
         <audio id="audio_beep" src={appSettings.soundBeep} autostart="false" preload="auto" />
         <audio id="audio_failure" src={appSettings.soundNok} autostart="false" preload="auto" />
@@ -285,24 +368,20 @@ const MainScreen = (props) => {
         <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
         <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div> 
       </div>*/}
-        <SafeBoxDial styles={style}
-              boxWidth={boxWidth} boxHeight={boxHeight} checking={processingSolution} 
-              rotationAngle={rotationAngle} setRotationAngle={setRotationAngle}
-              setSolutionArray={setSolutionArray} isReseting={isReseting}/>
+
               
       
-      <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
+      {/*<div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
       <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
-      <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div>
+      <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div>*/}
       <audio id="audio_beep" src={appSettings.soundBeep} autostart="false" preload="auto" />
       <audio id="audio_failure" src={appSettings.soundNok} autostart="false" preload="auto" />
       <audio id="audio_success" src={appSettings.soundOk} autostart="false" preload="auto" />
       </div>
+      <div style={{overflow: "visible", width: containerWidth, height:containerHeight, position:"absolute"}}>
+        <Remote boxWidth={containerWidth} boxHeight={containerHeight} onClickButton={onClickButton} decreaseVolume={decreaseVolume} increaseVolume={increaseVolume} />
+      </div>
 
-      {appSettings.lightBack==="true" && <div className='lockFuture' style={{ zIndex:4 , backgroundImage: 'url('+appSettings.backgroundLock+')', width: containerWidth, height: containerHeight,}}></div>}
-      <p id="rotationNum" className='rotationNum' onDragStart={(event) => event.preventDefault()} 
-            style={{color: appSettings.dialTextColor, fontSize:appSettings.dialTextSize, zIndex:5}}
-            >{rotationAngle/6}</p> 
  
     </div>);
 };
