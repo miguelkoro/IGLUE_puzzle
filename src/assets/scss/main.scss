@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Sixtyfour:BLED,SCAN@33,-2&display=swap');
 div#screen_main {
 	background-position: center;
 	background-repeat: no-repeat;
@@ -192,9 +193,9 @@ font-variation-settings:
 div.volumeBar{
 	background-color: rgba(0, 0, 0, 0.623);
 	margin-left:25vmin;
-	width: 50vmin;
+	//width: 50vmin;
 	position:absolute;
-	height:5vmin;
+	//height:5vmin;
 	//overflow:hidden;
 }
 
@@ -280,4 +281,75 @@ body {
 	100% {
 		transform: translateX(-10%) translateY(-10%);
 	}
+}
+
+p.channel{
+	font-size: 7vmin;
+	position: absolute;
+	z-index: 10;
+	color: rgb(15, 167, 15);
+	
+	//max-width: 40%;
+	//background-color: rgba(0, 0, 0, 0.425);
+	/*font-family: "Sixtyfour Convergence", sans-serif;
+	font-optical-sizing: auto;
+	//font-weight: 400;
+	//font-style: normal;
+	font-variation-settings:
+	  "BLED" 80,
+	  "SCAN" 80,
+	  "XELA" 80,
+	  "YELA" 80;*/
+	font-family: "Sixtyfour", sans-serif;
+	font-optical-sizing: auto;
+	//font-weight: 400;
+	font-style: normal;
+	font-variation-settings:
+		"BLED" 70,
+		"SCAN" 10;
+
+	/* Fondo semitransparente detrás del texto */
+	background-color: rgba(0, 0, 0, 0.5); /* Fondo negro semitransparente */
+	display: inline-block; /* Asegura que el fondo solo ocupe el área del texto */
+	//padding: 0.2em 0.4em; /* Espaciado alrededor del texto */
+	//padding-right: 0.2em;
+	padding-left: 0.2em;
+	border-radius: 6px; /* Bordes redondeados opcionales */
+	/* Añade el guion bajo parpadeante */
+	/* Guion bajo parpadeante solo si tiene la clase `show-cursor` */
+	&::after {
+		content: ""; /* Por defecto, no muestra nada */
+		display: inline-block;
+		margin-left: 0.2em;
+		color: rgb(15, 167, 15);
+		animation: none; /* Sin animación por defecto */
+	}
+  
+	&.show-cursor::after {
+		content: "_"; /* Muestra el guion bajo */
+	  	animation: blink 1s steps(2, start) infinite; /* Aplica la animación */
+	}
+  }
+  
+  /* Animación de parpadeo */
+  @keyframes blink {
+	0%, 50% {
+	  opacity: 1;
+	}
+	50.01%, 100% {
+	  opacity: 0;
+	}
+  }
+
+  div.row {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	position: absolute;
+	transform: translateX(-50%);
+
+	justify-content: center;
+
+	
 }

@@ -11,7 +11,7 @@ const BoxButton = (props) => {
       case "SYMBOLS":
         return <img className="symbol" src={appSettings.symbolsBackgroundKeys[props.position-1]}></img>;
       default:
-        return <p>{props.value}</p>;
+        return <p style={{color:appSettings.buttonTextColor, fontSize:appSettings.buttonFontSize}}>{props.value}</p>;
     }
   };
 
@@ -20,8 +20,9 @@ const BoxButton = (props) => {
       className={"boxButton boxButton" + props.position}
       onClick={() => props.onClick(props.value)}
       style={{
-        width: props.boxWidth * 0.1,
-        height: props.boxHeight * 0.1,
+        width: props.boxWidth * appSettings.buttonWidth,
+        height: props.boxHeight * appSettings.buttonHeight,
+        display: "inline-block", 
         backgroundImage: 'url("' + appSettings.backgroundButton + '")',
       }}
     >

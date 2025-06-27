@@ -7,6 +7,7 @@ import Remote from './Remote.jsx';
 import "video.js/dist/video-js.css";
 import "videojs-youtube";
 import { VideoJS } from './VideoJS.jsx'; // Importa el componente VideoJS
+import FuzzyOverlayExample from './FuzzyOverlay.jsx'; // Importa el componente FuzzyOverlayExample
 
 const MainScreen = (props) => {
   const { escapp, appSettings, Utils, I18n } = useContext(GlobalContext);
@@ -26,6 +27,8 @@ const MainScreen = (props) => {
   const [lightLeft, setLightLeft] = useState(0);//
   const [lightTop, setLightTop] = useState(0);//
 
+  const [password, setPassword] = useState(""); // Estado para la contraseña
+
   //
   const [rotationAngle, setRotationAngle] = useState(0); // Estado para la rotación
   const [isReseting, setIsReseting] = useState(false); // Estado para saber si se está reiniciando el lock
@@ -34,6 +37,9 @@ const MainScreen = (props) => {
   const [volume, setVolume] = useState(0.5); // Estado para el volumen (1 = 100%)
   const [showVolume, setShowVolume] = useState(false); // Estado para mostrar/ocultar el volumen
   const volumeTimeoutRef = useRef(null); // Referencia para almacenar el temporizador del volumen
+
+  const [timer, setTimer] = useState(null); // Temporizador para los 5 segundos
+  const [showCursor, setShowCursor] = useState(false); // Controla si se muestra el guion bajo
 
   const mp4VideoOptions = { 
     autoplay: true,
@@ -134,9 +140,9 @@ const MainScreen = (props) => {
         _containerMarginTop = 0;//_lockHeight*0;
         //_containerMarginLeft = _lockWidth * -0.065;
        // _containerWidth = _lockWidth *0.;
-        _containerHeight = _lockHeight *0.605;
-         _lightWidth = _lockWidth*0.9;
-        _lightHeight = _lockHeight*0.6;
+        _containerHeight = _lockHeight *1;
+         //_lightWidth = _lockWidth*1;
+        //_lightHeight = _lockHeight*0.6;
         //_lightLeft = props.appWidth / 2 + _lockWidth / 2 * 0;
         //_lightTop = props.appHeight / 2 - _lockHeight / 2 * 0.9;
         _boxHeight = _lockHeight * 0.9;
@@ -167,7 +173,7 @@ const MainScreen = (props) => {
     setLightTop(_lightTop);
   }
 
-  const onClickButton = (value) => {
+  /*const onClickButton = (value) => {
     if (processingSolution) {
       return;
     }
@@ -200,12 +206,36 @@ const MainScreen = (props) => {
         });
       }
     }, 300);
+  }*/
+
+  const onClickButton = (value) => {
+    //console.log("Button clicked: ", value);
+    if(processingSolution) return; // Si ya se está comprobando, no hace nada
+    setPassword(prev => prev + value); // Agrega el valor del botón a la solución
+    const shortBeep = document.getElementById("audio_beep");
+    shortBeep.pause();
+    shortBeep.currentTime = 0;
+    shortBeep.play();
+
+    // Activa el cursor y reinicia el temporizador de 5 segundos
+    setShowCursor(true);
+    //setShowSolution(true); // Muestra el <p> con la solución
+    if (timer) {
+      clearTimeout(timer); // Limpia el temporizador anterior
+    }
+    const newTimer = setTimeout(() => {
+      //checkSolution(); // Comprueba la solución después de 5 segundos      
+      handleTimerExpire(); // Maneja la expiración del temporizador
+      //console.log("checking solution...", solution);
+    }, 5000);
+    setTimer(newTimer);
+  
   }
 
-  const checkSolution = () => {
+  /*const checkSolution = () => {
     setProcessingSolution(true);
     Utils.log("Check solution", solutionArray);
-    const solution = solutionArray.join(';');
+    /const solution = password;//solutionArray.join(';');
     //const solution="12315"
     reset(); // Reinicia el lock
     console.log("Check solution", solution);
@@ -219,9 +249,9 @@ const MainScreen = (props) => {
             Utils.log("Error in checkNextPuzzle",e);
           }
         });
-  }
+  }*/
 
-  const changeBoxLight = (success, solution) => {
+ /* const changeBoxLight = (success, solution) => {
     let audio;
     let afterChangeBoxLightDelay = 1000;
     appSettings.skin === "RETRO" ? afterChangeBoxLightDelay = 4500 : afterChangeBoxLightDelay = 1500;
@@ -246,7 +276,7 @@ const MainScreen = (props) => {
     }, afterChangeBoxLightDelay);
 
     audio.play();
-  }
+  }*/
 
   //Pone la imagen del fondo
   //let backgroundImage = 'url("' + appSettings.backgroundKeypad + '")';
@@ -255,18 +285,97 @@ const MainScreen = (props) => {
     backgroundImage += ', url("' + appSettings.background + '")';
   }
 
+  const handleTimerExpire = () => {
+    //setChecking(true); // Activa el estado de checking
+    setProcessingSolution(true); // Activa el estado de processingSolution
+    setShowCursor(false); // Desactiva el cursor
+    //console.log("Checking solution...", solution);
+    setTimeout(() => {
+      //setShowSolution(false); // Oculta el <p> después de 3 segundos
+      //setSolution(""); // Reinicia la solución
+      setPassword(""); // Reinicia la contraseña
+      //setChecking(false); // Reinicia el estado de checking //CAMBIARLO A CUANDO HAGA EL CHEQUEO CON LA API
+      setProcessingSolution(false); // Reinicia el estado de processingSolution
+      setLight("off");
+      
+    }, 3000); // Espera 3 segundos antes de ocultar el <p>
+    
+  };
 
-  const  reset = () =>{
+  const checkChannels = () => {
+    const channel = appSettings.channels.find((channel) => channel.id === parseInt(password));
+    if (channel) {
+      rightChannel(channel); // Cambia a video de éxito
+      //setSolution(channel.name); // Actualiza la solución con el nombre del canal
+      //setPlayerOptions({...playerOptions, sources: [{src: channel.source, type: channel.type,},]});
+    } else {
+      //setSolution(""); // Reinicia la solución si no se encuentra el canal
+      wrongChannel(); // Cambia a video de error
+    }
+  }
+
+  useEffect(() => {
+    if (password.length >= appSettings.minLength) {
+      console.log("Checking solution...", password);
+      //Number(solution)===PASSWORD_API ? rightChannel() : wrongChannel(); 
+      checkChannels(); // Comprueba si la solución es un canal válido
+    }else if(password.length != 0 && password.length < appSettings.minLength){
+    //  console.log("Solution too short", solution);
+      wrongChannel();
+    }
+    
+  }, [processingSolution]); // Se ejecuta cada vez que cambia la solución*/
+
+  const wrongChannel = () => {
+    setPlayerOptions(mp4VideoOptions); // Guarda las opciones en el estado `playerOptions`  
+    setLight("red");
+    if (playerRef.current) {
+      try{
+        playerRef.current.pause(); // Pausa el video actual
+        playerRef.current.src(mp4VideoOptions.sources); // Cambia la fuente del reproductor
+        playerRef.current.load(); // Carga el nuevo video
+        handleVolume(); // Establece el volumen
+        //playerRef.current.volume(volume)
+        //playerRef.current.play(); // Reproduce el nuevo video
+        playerRef.current.oncanplay = () => {
+          playerRef.current.play();
+        }; // Asegura que el video se reproduzca cuando esté listo
+      
+      }catch(e){
+        console.error("Error al cambiar la fuente del reproductor:", e);
+      }
+    }
+  }
+
+  const rightChannel = (channel) => {
+    setPlayerOptions(channel); // Guarda las opciones en el estado `playerOptions`
+    setLight("green");
+    if (playerRef.current) {
+      try{
+        playerRef.current.pause(); // Pausa el video actual
+        playerRef.current.src(channel.sources); // Cambia la fuente del reproductor
+        playerRef.current.load(); // Carga el nuevo video
+        handleVolume(); // Establece el volumen
+        //playerRef.current.play(); // Reproduce el nuevo video
+
+      }catch(e){
+        console.error("Error al cambiar la fuente del reproductor:", e);
+      }
+    }
+  }
+
+
+  /*const  reset = () =>{
     //console.log("Solution: ", solutionArray);
     setIsReseting(true);
-    setRotationAngle(0); // Reinicia el ángulo de rotación
-    setSolutionArray([]);
+    //setRotationAngle(0); // Reinicia el ángulo de rotación
+    //setSolutionArray([]);
     //setTries(0);
     setTimeout(() => {      
       setIsReseting(false);
     }, 2500);
     //setChecking(false);
-  }
+  }*/
 
   const increaseVolume = () => {
     if (playerRef.current) {
@@ -296,13 +405,43 @@ const MainScreen = (props) => {
     }
   };
 
+  
+  const handleVolume = () =>{
+    setTimeout(() => {
+      if (volume <= 0) {
+        playerRef.current.muted(true); // Silencia el video si el volumen es 0
+      } else {
+        playerRef.current.muted(false); // Asegúrate de que no esté silenciado
+        playerRef.current.volume(volume); // Establece el volumen al valor actual
+      }
+      playerRef.current.play(); // Reproduce el nuevo video
+    }, 100); // Espera un breve momento para que el reproductor inicialice la nueva fuente
+
+  }
+
+  const volumeAppear = () => {
+      // Cancela el temporizador anterior si existe
+    if (volumeTimeoutRef.current) {
+      clearTimeout(volumeTimeoutRef.current);
+    }  
+    setShowVolume(true);
+    // Inicia un nuevo temporizador y almacena su identificador
+    volumeTimeoutRef.current = setTimeout(() => {
+      setShowVolume(false); // Oculta el volumen después de 3 segundos
+      volumeTimeoutRef.current = null; // Limpia la referencia
+    }, 4000);
+    //console.log("Volume: ", volume);
+  }
+
+  
+
   /*useEffect(() => { // Comprueba si se ha alcanzado el número máximo de intentos (En local y en API)           
     //console.log("Tries: ", tries, "Solution: ", solutionArray);
       solutionArray.length >= appSettings.solutionLength && checkSolution();
       console.log("Solution: ", solutionArray);
   }, [solutionArray]);*/
 
-  /*useEffect(() => {
+  useEffect(() => {
     if (playerRef.current) {
       playerRef.current.volume(volume); // Establece el volumen del reproductor
     }
@@ -314,7 +453,7 @@ const MainScreen = (props) => {
         clearTimeout(volumeTimeoutRef.current);
       }
     };
-  }, []);*/
+  }, []);
 
   return (
     <div id="screen_main" className={"screen_content"} style={{ backgroundImage: backgroundImage }}>
@@ -324,18 +463,24 @@ const MainScreen = (props) => {
           display: "flex", alignItems: "center", zIndex:2,
           justifyContent: "center", flexDirection: "column"
         }}>
+      <div className='empty_black' style={{top:appSettings.blackScreenTop, left:appSettings.blackScreenLeft, width:appSettings.blackScreenWidth, height:appSettings.blackScreenHeight}}></div>
       <div className='video_container' style={{position: "absolute", width: boxWidth*0.9, left: "13.5%", top: "10%", zIndex: 1}}>
         <VideoJS  options={playerOptions} onReady={(player) => {playerRef.current = player;}}/>  
       </div>
+      {appSettings.fuzzyScreen  && <div style={{overflow:"hidden", position:"absolute", width:"85%", height:"70%", left:"10%", top:"10%", zIndex:2}}><FuzzyOverlayExample/></div>}
       <div id="lockContainer" className="lockContainer" 
         style={{backgroundImage: 'url('+appSettings.backgroundTV+')', width: containerWidth, 
           height: containerHeight, marginTop: containerMarginTop, marginLeft: containerMarginLeft ,
           zIndex:2}}></div>
 
+
+      {/** CANAL */}
+      {password && (<p className={`channel ${showCursor ? "show-cursor" : ""}`} style={{top:"10%", left:"14%"}}>{password}</p>)}
+      
       {showVolume && (
-            <div className='volume_div' style={{left:"19%", top:"47%"}}>
+            <div className='volume_div' style={{left:"5%", top:"5%", zIndex:10, width: boxWidth}}>
               <p className='volume'>vol</p>
-              <div className='volumeBar'>
+              <div className='volumeBar' style={{width: "40%", height: "5vmin"}}>
                 <div className='volumeBarFilled' style={{width: `${volume * 100}%`}}></div>
               </div>
             </div>

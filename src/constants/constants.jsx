@@ -6,7 +6,7 @@ export const DEFAULT_APP_SETTINGS = {
   background: "images/standard/background4.png",
   backgroundTV : "images/standard/background_TV.png",
   backgroundRemote : "images/standard/background_remote.png",
-  backgroundDial: "images/standard/dial_classic.png",
+  //backgroundDial: "images/standard/dial_classic.png",
   backgroundButton: "images/standard/background_button.png",
   //backgroundKeypad: "images/standard/lock.png",
   backgroundKey: "images/background_key.png",
@@ -72,7 +72,7 @@ export const DEFAULT_APP_SETTINGS = {
   imageLightOff: "images/standard/light_off.png",
   imageLightNok: "images/standard/light_nok.png",
   imageLightOk: "images/standard/light_ok.png",
-  //soundBeep: "sounds/beep.mp3",
+  soundBeep: "sounds/beep.mp3",
   soundNok: "sounds/solution_nok.mp3",
   soundOk: "sounds/solution_ok.mp3",
   soundDial: "sounds/spin.wav",
@@ -82,7 +82,25 @@ export const DEFAULT_APP_SETTINGS = {
   dialTextSize: "9vmin", // Font size for the dial text
   dialTextColor: "#000000", // Color for the dial text
 
+  buttonFontSize: "5vmin", // Font size for the text in the keypad
+  soundIconSize: "5vmin", // Size of the sound icon in the keypad
+  buttonTextColor: "#000000", // Color for the text in the keypad
+
+  buttonWidth: 0.09, // Relative width of the buttons in the keypad
+  buttonHeight: 0.07, // Relative height of the buttons in the keypad
+
   lightBack: "false", // Controls whether to show the image behind the dial frame
+
+  minLength: 4, // Minimum length of the solution
+
+  displayVHS: true,
+
+  blackScreenWidth: "70%", // Width of the black screen in the TV
+  blackScreenHeight: "65%", // Height of the black screen in the TV
+  blackScreenLeft: "10%", // Left position of the black screen in the TV
+  blackScreenTop: "5%", // Top position of the black screen
+
+  fuzzyScreen: true, // Whether to apply a fuzzy effect to the TV screen
 
   //
 
@@ -137,11 +155,14 @@ export const SKIN_SETTINGS_RETRO = {
 
 export const SKIN_SETTINGS_FUTURISTIC = {
   background: "images/futuristic/background_futuristic.png",
-  backgroundKeypad: "images/background_keypad_futuristic.png",
-  backgroundKey: "images/background_key_futuristic.png",
-  
-  backgroundLock : "images/futuristic/background_lock_futuristic.png",
-  backgroundDial: "images/futuristic/dial_futuristic.png",
+  //backgroundKeypad: "images/background_keypad_futuristic.png",
+  //backgroundKey: "images/background_key_futuristic.png",
+  backgroundTV : "images/futuristic/background_TV.png",
+  backgroundRemote : "images/futuristic/background_remote.png",
+  //backgroundDial: "images/standard/dial_classic.png",
+  backgroundButton: "images/futuristic/background_button.png",
+  //backgroundLock : "images/futuristic/background_lock_futuristic.png",
+  //backgroundDial: "images/futuristic/dial_futuristic.png",
   coloredBackgroundKeys: [
     "images/background_key_futuristic_red.png",
     "images/background_key_futuristic_green.png",
@@ -165,6 +186,9 @@ export const SKIN_SETTINGS_FUTURISTIC = {
   dialTextSize: "9vmin", // Font size for the dial text
   dialTextColor: "#0fbdfd", // Color for the dial text
   lightBack:"true", //Para controlar si se muestra la imagen tras el marco del dial
+
+  displayVHS: false,
+  fuzzyScreen: false,
 };
 
 export const ESCAPP_CLIENT_SETTINGS = {
