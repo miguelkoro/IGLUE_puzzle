@@ -59,37 +59,7 @@ const MainScreen = (props) => {
   const [playerOptions, setPlayerOptions] = useState(mp4VideoOptions); // Estado para las opciones del reproductor
   //
 
-  const styles ={
-    "STANDARD": {
-      //lock: "../images/standard/lock_classic.png",
-      //dial: "images/standard/dial_classic.png",
-      //dial_size: 0.4,
-      //dial_sound: "sounds/spin.wav",
-      dial_text_color: "#000000",
-      dial_text_size: "13vmin",
-      //dial_text_zIndex: 1,
-    },
-    "RETRO": {
-      //lock: "images/lock_old.png",
-      //dial: "images/dial_old.png",
-      //dial_size: 0.5,
-      //dial_sound: "sounds/spin_old2.wav",
-      dial_text_color:  "#FFFFFF",
-      dial_text_size: "10vmin",
-      //dial_text_zIndex: 1,
-    },
-    "FUTURISTIC": {
-      //lock: "images/lock_modern.png",
-      //dial: "images/dial_modern.png",
-      //dial_size: 0.6,
-      dial_sound: "sounds/spin.wav",
-      dial_text_color: "#59c2ca",
-     // dial_text_size: "11vmin",
-      //dial_text_zIndex: -1,
-    }
-  }
-  const defaultStyle = styles["STANDARD"];
-  const style = styles[appSettings.skin] || styles["STANDARD"];
+
 //
 
   useEffect(() => {
@@ -130,7 +100,7 @@ const MainScreen = (props) => {
         _containerMarginTop = 0;
        // _containerMarginLeft = 0;
         //_containerWidth = _lockWidth *0.45;
-        _containerHeight = _lockHeight *0.55;
+       // _containerHeight = _lockHeight *0.55;
         _lightWidth = _lockWidth * 0.18;
         _lightHeight = _lockHeight *0.18;
         _lightLeft = _lockWidth * 0;
@@ -455,6 +425,42 @@ const MainScreen = (props) => {
     };
   }, []);
 
+  const TV_Buttons = (
+    <div style={{ position: "absolute", zIndex: 4, height:containerHeight,  width: containerWidth}}>
+      <div style={{position: "absolute", left: appSettings.buttonsLeft,  height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+        <div id="row1" className="row" style={{ top: appSettings.buttonsTop[0]}}>
+          <BoxButton value={"1"} position={1} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
+          <BoxButton value={"2"} position={2} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
+          <BoxButton value={"3"} position={3} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
+        </div>
+        <div id="row2" className="row" style={{ top: appSettings.buttonsTop[1]}} >
+          <BoxButton value={"4"} position={4} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
+          <BoxButton value={"5"} position={5} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
+          <BoxButton value={"6"} position={6} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
+        </div>
+        <div id="row3" className="row" style={{ top: appSettings.buttonsTop[2]}}>
+          <BoxButton value={"7"} position={7} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
+          <BoxButton value={"8"} position={8} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
+          <BoxButton value={"9"} position={9} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
+        </div>
+        <div id="row4" className="row" style={{top: appSettings.buttonsTop[3]}}>
+          <div style={{width:boxWidth*appSettings.buttonWidth, height:boxHeight*appSettings.buttonHeight,}}/>
+          <BoxButton value={"0"} position={10} onClick={onClickButton} boxHeight={boxHeight} boxWidth={boxWidth} />
+          <div style={{width:boxWidth*appSettings.buttonWidth, height:boxHeight*appSettings.buttonHeight,}}/>
+        </div>
+        <div id="row4" className="row" style={{top: appSettings.buttonsTop[4]}}>
+          <BoxButton value={"-"} position={11} onClick={decreaseVolume} boxHeight={boxHeight} boxWidth={boxWidth}/>
+            <div style={{width:boxWidth*appSettings.buttonWidth, height:boxHeight*appSettings.buttonHeight, display:"inline-block",}}>
+                <div style={{ justifyContent:"center", alignItems:"center", display:"flex",}}>
+                    <svg style={{marginTop:appSettings.volumeIconTop}} width={appSettings.soundIconSize} height={appSettings.soundIconSize} viewBox="0 -1 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" fill={appSettings.soundIconColor} stroke={appSettings.soundIconColor}> <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>  <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g> <g id="SVGRepo_iconCarrier"> <title>multimedia / 4 - multimedia, audio, music, sound, max, speaker, volume icon</title> <g id="Free-Icons" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd" strokeLinecap="round" strokeLinejoin="round" > <g transform="translate(-968.000000, -304.000000)" id="Group" stroke={appSettings.soundIconColor} strokeWidth="2"> <g transform="translate(967.000000, 302.000000)" id="Shape"> <path d="M18.22291,4.24772391 C20.3461043,5.89188107 21.7500001,8.74918751 21.7500001,12 C21.7500001,15.2055503 20.384926,18.0284761 18.3111758,19.6828962"></path> <path d="M16.25,16.5 C17.434,15.6838509 18.25,13.984472 18.25,12.0055901 C18.25,10.0267081 17.434,8.32732919 16.25,7.5"></path> <path d="M4.254916,9 L6.24999966,9 L11.2499997,3 L13.2499997,3 L13.2499997,20.9958147 L11.2499997,20.9958147 L6.24999966,15 L4.254916,15 C3.1503465,15 2.254916,14.1045695 2.254916,13 L2.254916,11 C2.254916,9.8954305 3.1503465,9 4.254916,9 Z"></path></g> </g> </g></g></svg>
+                </div>
+            </div>
+          <BoxButton value={"+"} position={12} onClick={increaseVolume} boxHeight={boxHeight} boxWidth={boxWidth} />
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div id="screen_main" className={"screen_content"} style={{ backgroundImage: backgroundImage }}>
       <div id="lockContainer" className="lockContainer" 
@@ -463,11 +469,11 @@ const MainScreen = (props) => {
           display: "flex", alignItems: "center", zIndex:2,
           justifyContent: "center", flexDirection: "column"
         }}>
-      <div className='empty_black' style={{top:appSettings.blackScreenTop, left:appSettings.blackScreenLeft, width:appSettings.blackScreenWidth, height:appSettings.blackScreenHeight}}></div>
-      <div className='video_container' style={{position: "absolute", width: boxWidth*0.9, left: "13.5%", top: "10%", zIndex: 1}}>
+      {appSettings.blackScreen && <div className='empty_black' style={{top:appSettings.blackScreenTop, left:appSettings.blackScreenLeft, width:appSettings.blackScreenWidth, height:appSettings.blackScreenHeight}}></div>}
+      <div className='video_container' style={{position: "absolute", width: boxWidth*appSettings.videoPlayerWidth, left: appSettings.videoPlayerLeft, top: appSettings.videoPlayerTop, zIndex: 1}}>
         <VideoJS  options={playerOptions} onReady={(player) => {playerRef.current = player;}}/>  
       </div>
-      {appSettings.fuzzyScreen  && <div style={{overflow:"hidden", position:"absolute", width:"85%", height:"70%", left:"10%", top:"10%", zIndex:2}}><FuzzyOverlayExample/></div>}
+      {appSettings.fuzzyScreen  && <div style={{overflow:"hidden", position:"absolute", width:appSettings.fuzzyScreenWidth, height:appSettings.fuzzyScreenHeight, left:appSettings.fuzzyScreenLeft, top:appSettings.fuzzyScreenTop, zIndex:2}}><FuzzyOverlayExample/></div>}
       <div id="lockContainer" className="lockContainer" 
         style={{backgroundImage: 'url('+appSettings.backgroundTV+')', width: containerWidth, 
           height: containerHeight, marginTop: containerMarginTop, marginLeft: containerMarginLeft ,
@@ -475,7 +481,7 @@ const MainScreen = (props) => {
 
 
       {/** CANAL */}
-      {password && (<p className={`channel ${showCursor ? "show-cursor" : ""}`} style={{top:"10%", left:"14%"}}>{password}</p>)}
+      {password && (<p className={`channel ${showCursor ? "show-cursor" : ""}`} style={{top:appSettings.channelNumberTop, left:appSettings.channelNumberLeft, fontSize: appSettings.channelFontSize}}>{password}</p>)}
       
       {showVolume && (
             <div className='volume_div' style={{left:"5%", top:"5%", zIndex:10, width: boxWidth}}>
@@ -523,9 +529,12 @@ const MainScreen = (props) => {
       <audio id="audio_failure" src={appSettings.soundNok} autostart="false" preload="auto" />
       <audio id="audio_success" src={appSettings.soundOk} autostart="false" preload="auto" />
       </div>
+      {appSettings.showRemote ?
       <div style={{overflow: "visible", width: containerWidth, height:containerHeight, position:"absolute"}}>
         <Remote boxWidth={containerWidth} boxHeight={containerHeight} onClickButton={onClickButton} decreaseVolume={decreaseVolume} increaseVolume={increaseVolume} />
-      </div>
+      </div> :
+        TV_Buttons
+      }
 
  
     </div>);
