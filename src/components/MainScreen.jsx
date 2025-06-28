@@ -184,11 +184,14 @@ const [audioAmplitude, setAudioAmplitude] = useState(amplitude);
           
           audio.play();
           visualizeAudio(audio);
-          setTimeout(() => {
+          /*setTimeout(() => {
             props.onKeypadSolved(solution); //Cambiar
             Utils.log("Puzzle solved, sending solution");
             
-          }, appSettings.timeSoundAfterSolve); 
+          }, appSettings.timeSoundAfterSolve); */
+          audio.onended = () => {
+            props.onKeypadSolved(solution);
+          }
           
         }else{
           props.onKeypadSolved(solution); //Cambiar
