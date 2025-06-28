@@ -177,6 +177,10 @@ position: absolute;
 color: rgb(15, 167, 15);
 font-family: "Sixtyfour", sans-serif;
 font-optical-sizing: auto;
+text-align: right;
+margin:0;
+flex-shrink: 0;
+
 //font-weight: 400;
 font-style: normal;
 font-variation-settings:
@@ -187,12 +191,13 @@ font-variation-settings:
 .volume_div{
 	position: absolute;
 	display:flex;
+	
 	align-items: center;
 }
 
 div.volumeBar{
 	background-color: rgba(0, 0, 0, 0.623);
-	margin-left:25vmin;
+	//left:25vmin;
 	//width: 50vmin;
 	position:absolute;
 	//height:5vmin;
@@ -201,7 +206,7 @@ div.volumeBar{
 
 div.volumeBarFilled{
 	background-color: rgba(15, 167, 15, 0.76);
-	position: absolute;
+	//position: relative;
 	height: 100%;
 }
 

@@ -89,7 +89,7 @@ export const DEFAULT_APP_SETTINGS = {
   buttonWidth: 0.09, // Relative width of the buttons in the keypad
   buttonHeight: 0.07, // Relative height of the buttons in the keypad
 
-  lightBack: "false", // Controls whether to show the image behind the dial frame
+  //lightBack: "false", // Controls whether to show the image behind the dial frame
 
   minLength: 4, // Minimum length of the solution
 
@@ -124,6 +124,17 @@ export const DEFAULT_APP_SETTINGS = {
   fuzzyScreenHeight: "65%", // Height of the fuzzy screen effect
   fuzzyScreenLeft: "11%", // Left position of the fuzzy screen effect
   fuzzyScreenTop: "5%", // Top position of the fuzzy screen effect
+
+  volumeTop: "60%",
+  volumeLeft: "17%", // Left position of the volume control in the remote
+  volumeHeight: "5vmin", // Height of the volume control in the remote
+  volumeContainerWidth: 0.45, // Width of the volume control container in the remote
+  volumeBarLeft: 0.21,
+  volumeFontSize: 0.07,
+
+  volumeBarColor: "rgba(15, 167, 15, 0.76)", // Color of the volume bar
+  volumeColor: "rgb(15, 167, 15)", // Color of the volume text
+
 
   //
 
@@ -203,8 +214,15 @@ export const SKIN_SETTINGS_RETRO = {
   videoPlayerLeft: "8.5%", // Left position of the video player
   videoPlayerTop: "30%", // Top position of the video player
 
-  channelNumberTop: "25%", // Top position of the channel number in the TV
+  channelNumberTop: "32%", // Top position of the channel number in the TV
   channelNumberLeft: "10%", // Left position of the channel number in the TV
+
+  volumeTop: "70%",
+  volumeLeft: "10%", // Left position of the volume control in the remote
+  volumeHeight: "4.5vmin", // Height of the volume control in the remote
+  volumeContainerWidth: 0.35, // Width of the volume control container in the remote
+  volumeBarLeft: 0.21,
+  volumeFontSize: 0.07, // Font size for the volume control text in the remote
 
 };
 
@@ -220,14 +238,9 @@ export const SKIN_SETTINGS_FUTURISTIC = {
   //backgroundDial: "images/futuristic/dial_futuristic.png",
 
   backgroundMessage: "images/background_message_futuristic.png",
-  imageLightOff: "images/futuristic/light_off_futuristic.png",
-  imageLightNok: "images/futuristic/light_nok_futuristic.png",
-  imageLightOk: "images/futuristic/light_ok_futuristic.png",
-  soundNok: "sounds/solution_nok_futuristic.wav",
 
-  dialTextSize: "9vmin", // Font size for the dial text
-  dialTextColor: "#0fbdfd", // Color for the dial text
-  lightBack:"true", //Para controlar si se muestra la imagen tras el marco del dial
+
+
 
   displayVHS: false,
   fuzzyScreen: false,
@@ -252,6 +265,15 @@ export const SKIN_SETTINGS_FUTURISTIC = {
   buttonsTop: ["25%", "35%", "45%", "55%", "65%", "75%"], // Top positions for the rows of buttons in the remote
   buttonsLeft: "50%", // Left position for the remote buttons
   soundIconColor: "#FFFFFF", // Color for the sound icon in the remote
+
+  volumeTop: "62%",
+  volumeLeft: "8%", // Left position of the volume control in the remote
+
+
+  volumeHeight: "5vmin", // Height of the volume control in the remote
+  volumeContainerWidth: 0.6, // Width of the volume control container in the remote
+  volumeBarLeft: 0.25,
+  volumeFontSize: 0.08,
 };
 
 export const ESCAPP_CLIENT_SETTINGS = {

@@ -484,10 +484,10 @@ const MainScreen = (props) => {
       {password && (<p className={`channel ${showCursor ? "show-cursor" : ""}`} style={{top:appSettings.channelNumberTop, left:appSettings.channelNumberLeft, fontSize: appSettings.channelFontSize}}>{password}</p>)}
       
       {showVolume && (
-            <div className='volume_div' style={{left:"5%", top:"5%", zIndex:10, width: boxWidth}}>
-              <p className='volume'>vol</p>
-              <div className='volumeBar' style={{width: "40%", height: "5vmin"}}>
-                <div className='volumeBarFilled' style={{width: `${volume * 100}%`}}></div>
+            <div className='volume_div' style={{left:appSettings.volumeLeft, top:appSettings.volumeTop, zIndex:10, width: containerWidth*appSettings.volumeContainerWidth}}>
+              <p className='volume' style={{fontSize:containerWidth*appSettings.volumeFontSize, color:appSettings.volumeColor}}>vol</p>
+              <div className='volumeBar' style={{width: "100%", height: appSettings.volumeHeight, marginLeft: containerWidth*appSettings.volumeBarLeft, }}>
+                <div className='volumeBarFilled' style={{width: `${volume * 100}%`, backgroundColor:appSettings.volumeBarColor}}></div>
               </div>
             </div>
             )}
