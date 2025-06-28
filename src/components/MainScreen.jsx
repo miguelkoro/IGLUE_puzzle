@@ -8,9 +8,10 @@ import "video.js/dist/video-js.css";
 import "videojs-youtube";
 import { VideoJS } from './VideoJS.jsx'; // Importa el componente VideoJS
 import FuzzyOverlayExample from './FuzzyOverlay.jsx'; // Importa el componente FuzzyOverlayExample
+import { use } from 'react';
 
 const MainScreen = (props) => {
-  const { escapp, appSettings, Utils, I18n } = useContext(GlobalContext);
+  const { escapp, appSettings, Utils, I18n, Storage, setStorage } = useContext(GlobalContext);
   const [tries, setTries] = useState(0); // Contador de intentos
   const [solutionArray, setSolutionArray] = useState([]); // Array para guardar la solución
   const [currentSolution, setCurrentSolution] = useState([]);
@@ -41,6 +42,9 @@ const MainScreen = (props) => {
   const [timer, setTimer] = useState(null); // Temporizador para los 5 segundos
   const [showCursor, setShowCursor] = useState(false); // Controla si se muestra el guion bajo
 
+  const savedChannel = Storage.getSetting("channel") || appSettings.defaultVideo; // Recupera el canal guardado del almacenamiento
+  const [load, setLoad] = useState(false); // Estado para controlar la carga del video
+
   const mp4VideoOptions = { 
     autoplay: true,
     controls: false,
@@ -51,8 +55,8 @@ const MainScreen = (props) => {
     muted: true,
     techOrder: ["html5", "youtube"],
     sources: [
-      { src: "video/WhiteNoise.mp4", // Reemplaza con la ruta de tu archivo MP4
-        type: "video/mp4"},   //https://pixabay.com/videos/digital-t-v-noise-old-analog-27519/
+      { src: savedChannel.src,//"video/WhiteNoise.mp4", // Reemplaza con la ruta de tu archivo MP4
+        type: savedChannel.type}//"video/mp4"},   //https://pixabay.com/videos/digital-t-v-noise-old-analog-27519/
     ],
     userActions: { click: false }
   };
@@ -64,6 +68,7 @@ const MainScreen = (props) => {
 
   useEffect(() => {
     handleResize();
+    //console.log(savedChannel.sources.src, savedChannel.sources.type);
   }, [props.appWidth, props.appHeight]);
 
   function handleResize(){
@@ -302,7 +307,7 @@ const MainScreen = (props) => {
     if (playerRef.current) {
       try{
         playerRef.current.pause(); // Pausa el video actual
-        playerRef.current.src(mp4VideoOptions.sources); // Cambia la fuente del reproductor
+        playerRef.current.src(appSettings.defaultVideo); // Cambia la fuente del reproductor
         playerRef.current.load(); // Carga el nuevo video
         handleVolume(); // Establece el volumen
         //playerRef.current.volume(volume)
@@ -319,15 +324,18 @@ const MainScreen = (props) => {
 
   const rightChannel = (channel) => {
     setPlayerOptions(channel); // Guarda las opciones en el estado `playerOptions`
+    let source= {src: channel.src, type: channel.type}; // Crea un objeto de fuente
     setLight("green");
     if (playerRef.current) {
       try{
         playerRef.current.pause(); // Pausa el video actual
-        playerRef.current.src(channel.sources); // Cambia la fuente del reproductor
+        playerRef.current.src(source); // Cambia la fuente del reproductor
         playerRef.current.load(); // Carga el nuevo video
         handleVolume(); // Establece el volumen
         //playerRef.current.play(); // Reproduce el nuevo video
-
+        //setStorage("savedChannel", channel.id); // Guarda el canal actual en el almacenamiento
+        //console.log(Storage.getSetting("state")); // Guarda el canal actual en el almacenamiento
+        Storage.saveSetting("channel", channel); // Guarda el canal actual en el almacenamiento
       }catch(e){
         console.error("Error al cambiar la fuente del reproductor:", e);
       }
@@ -418,12 +426,16 @@ const MainScreen = (props) => {
   }, [volume]); // Se ejecuta cada vez que cambia el volumen
 
   useEffect(() => {
+
+
     return () => {
       if (volumeTimeoutRef.current) {
         clearTimeout(volumeTimeoutRef.current);
       }
     };
   }, []);
+
+
 
   const TV_Buttons = (
     <div style={{ position: "absolute", zIndex: 4, height:containerHeight,  width: containerWidth}}>
@@ -471,7 +483,7 @@ const MainScreen = (props) => {
         }}>
       {appSettings.blackScreen && <div className='empty_black' style={{top:appSettings.blackScreenTop, left:appSettings.blackScreenLeft, width:appSettings.blackScreenWidth, height:appSettings.blackScreenHeight}}></div>}
       <div className='video_container' style={{position: "absolute", width: boxWidth*appSettings.videoPlayerWidth, left: appSettings.videoPlayerLeft, top: appSettings.videoPlayerTop, zIndex: 1}}>
-        <VideoJS  options={playerOptions} onReady={(player) => {playerRef.current = player;}}/>  
+        <VideoJS  options={playerOptions} onReady={(player) => {playerRef.current = player;}} setLoad={setLoad}/>  
       </div>
       {appSettings.fuzzyScreen  && <div style={{overflow:"hidden", position:"absolute", width:appSettings.fuzzyScreenWidth, height:appSettings.fuzzyScreenHeight, left:appSettings.fuzzyScreenLeft, top:appSettings.fuzzyScreenTop, zIndex:2}}><FuzzyOverlayExample/></div>}
       <div id="lockContainer" className="lockContainer" 
