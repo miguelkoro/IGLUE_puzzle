@@ -77,12 +77,12 @@ const MainScreen = (props) => {
     let _lockWidth = Math.min(props.appHeight * aspectRatio, props.appWidth) ;
     let _lockHeight = _lockWidth / aspectRatio;
 
-    let _containerWidth = _lockWidth *0.8;
-    let _containerHeight = _lockHeight *0.8;
+    let _containerWidth = _lockWidth *0.9;
+    let _containerHeight = _lockHeight *0.9;
 
 
     let _containerMarginLeft=0;
-    let _containerMarginTop=0;
+    let _containerMarginTop=_containerHeight*-0.03;
 
     let _boxWidth = _lockWidth * 0.7;
     let _boxHeight = _lockHeight * 0.7;
@@ -285,24 +285,16 @@ const MainScreen = (props) => {
         <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
         <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div> 
       </div>*/}
-        <SafeBoxDial styles={style}
-              boxWidth={boxWidth} boxHeight={boxHeight} checking={processingSolution} 
-              rotationAngle={rotationAngle} setRotationAngle={setRotationAngle}
-              setSolutionArray={setSolutionArray} isReseting={isReseting}/>
-              
+   
       
-      <div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
+      {/*<div className="boxLight boxLight_off" style={{ visibility: light === "off" ? "visible" : "hidden", opacity: light === "off" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOff + '")', left: lightLeft, top: lightTop }} ></div> 
       <div className="boxLight boxLight_nok" style={{ visibility: light === "nok" ? "visible" : "hidden", opacity: light === "nok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightNok + '")', left: lightLeft, top: lightTop }} ></div> 
-      <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div>
+      <div className="boxLight boxLight_ok" style={{ visibility: light === "ok" ? "visible" : "hidden", opacity: light === "ok" ? "1" : "0", width: lightWidth, height: lightHeight, backgroundImage: 'url("' + appSettings.imageLightOk + '")', left: lightLeft, top: lightTop }} ></div>*/}
       <audio id="audio_beep" src={appSettings.soundBeep} autostart="false" preload="auto" />
       <audio id="audio_failure" src={appSettings.soundNok} autostart="false" preload="auto" />
       <audio id="audio_success" src={appSettings.soundOk} autostart="false" preload="auto" />
       </div>
 
-      {appSettings.lightBack==="true" && <div className='lockFuture' style={{ zIndex:4 , backgroundImage: 'url('+appSettings.backgroundLock+')', width: containerWidth, height: containerHeight,}}></div>}
-      <p id="rotationNum" className='rotationNum' onDragStart={(event) => event.preventDefault()} 
-            style={{color: appSettings.dialTextColor, fontSize:appSettings.dialTextSize, zIndex:5}}
-            >{rotationAngle/6}</p> 
  
     </div>);
 };
