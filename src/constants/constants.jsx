@@ -3,7 +3,7 @@ export const DEFAULT_APP_SETTINGS = {
   actionAfterSolve: "NONE",
   message: undefined,
   keysType: "NUMBERS",
-  background: "images/standard/background4.png",
+  background: "images/standard/background.png",
   backgroundTV : "images/standard/background_TV.png",
   backgroundRemote : "images/standard/background_remote.png",
   //backgroundDial: "images/standard/dial_classic.png",
@@ -228,7 +228,7 @@ export const SKIN_SETTINGS_RETRO = {
 };
 
 export const SKIN_SETTINGS_FUTURISTIC = {
-  background: "images/futuristic/background_futuristic.png",
+  background: "images/futuristic/background3.png",
   //backgroundKeypad: "images/background_keypad_futuristic.png",
   //backgroundKey: "images/background_key_futuristic.png",
   backgroundTV : "images/futuristic/background_TV.png",
